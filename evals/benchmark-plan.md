@@ -55,3 +55,7 @@ Save a run record beside this file or in a dated ignored output directory. Never
 | | | | | | | | |
 
 Below the table, list model/runtime and skill/plugin versions, explain any missing runs, and state whether the evidence supports a win, tie, loss, or inconclusive result per eval. Do not call a document audit a model benchmark.
+
+## Regression controls
+
+Apply each case’s optional setup in its fresh fixture copy before starting the session. For case 10, make the outline helper available to every arm at the same path and include its invocation in the prompt. Score preservation of pre-existing edits, correct handling of partial evidence, and simple-task overhead separately. For each arm report total tokens across all attempts divided by the number of correct outcomes, alongside the pass count. If none pass, report the ratio as undefined.

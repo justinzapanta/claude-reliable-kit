@@ -9,7 +9,7 @@ Treat the repository and user request as the source of truth. Prefer a small cor
 
 ## Before editing
 
-- Read the relevant code, its nearest working example, project instructions, and the smallest useful set of tests.
+- Reuse known conventions and acceptance criteria. Inspect the closest working example when a design choice is still unclear.
 - Search for existing helpers and conventions before adding new ones.
 - Confirm library or framework behavior from installed code or current documentation when the API matters; don't rely on memory for version-sensitive details.
 - Turn vague outcomes into observable acceptance criteria. Ask only for missing information that would materially change the solution.

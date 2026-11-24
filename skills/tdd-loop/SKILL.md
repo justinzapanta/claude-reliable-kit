@@ -13,7 +13,7 @@ Turn the intended behavior into evidence before writing its implementation. Keep
 2. State the behavior and important boundary cases. Write one focused test at the layer that owns that behavior.
 3. Run that test before changing production code. Confirm it fails because the behavior is missing, not because the test, fixture, or environment is broken. If it passes already, reassess the test.
 4. Make the smallest implementation that satisfies the failing test. Avoid unrelated cleanup and speculative abstractions.
-5. Rerun the focused test and confirm it passes. Then run the relevant broader suite or checks if available.
+5. Rerun the focused test and confirm it passes. Record its outcome once for verification. Broaden the checks when a changed contract or caller needs coverage.
 6. Refactor only when it improves clarity or removes duplication; rerun the relevant checks after refactoring.
 
 ## Practical judgment

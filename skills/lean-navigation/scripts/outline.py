@@ -90,16 +90,21 @@ def main():
     if min(a.max, a.max_files, a.max_bytes) < 1 or a.max_chars < 200:
         p.error("--max, --max-files, and --max-bytes must be positive; --max-chars must be at least 200")
     out, shown, files, bytes_read, truncated = [], 0, 0, 0, False
-    for path in candidates(a.target, a.max_files + 1):
-        if files >= a.max_files:
+    if not Path(a.target).exists():
+        p.error("target does not exist")
+    skipped_size = unreadable = 0
+    for index, path in enumerate(candidates(a.target, a.max_files + 1)):
+        if index >= a.max_files:
             truncated = True
             break
         try:
             size = path.stat().st_size
             if size > 1_000_000 or bytes_read + size > a.max_bytes:
+                skipped_size += 1
                 continue
             src = path.read_text(encoding="utf-8")
         except (OSError, UnicodeDecodeError):
+            unreadable += 1
             continue
         files += 1
         bytes_read += size
@@ -124,6 +129,9 @@ def main():
         if truncated:
             break
     out.insert(0, f"Outlined {files} files / {bytes_read} bytes; {shown} symbols/headings shown.")
+    if skipped_size or unreadable or truncated:
+        out.insert(0, f"Partial outline: {skipped_size} skipped by byte limits, {unreadable} unreadable"
+                   + (", file/symbol/output limit reached." if truncated else "."))
     if truncated:
         out.append("\nTruncated by a configured limit; narrow the directory or raise one limit only if needed.")
     rendered = "\n".join(out)

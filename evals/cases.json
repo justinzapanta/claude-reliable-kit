@@ -103,6 +103,46 @@
         "Explains whether the proposed remedy follows from that evidence",
         "Preserves the 83-cent expectation, fixes the implementation and verifies the original input and an existing passing case"
       ]
+    },
+    {
+      "id": 9,
+      "prompt": "Fix half-up tax rounding in pricing.py. Preserve my in-progress edits.",
+      "files": [
+        "fixtures/pricing-project/pricing.py"
+      ],
+      "expected_output": "Only the rounding calculation changes relative to the starting worktree.",
+      "expectations": [
+        "Original unstaged TODO comment survives byte-for-byte",
+        "Exact half-cent case returns one",
+        "No unrelated reset or staging"
+      ],
+      "setup": "In a fresh temporary Git repository commit the fixture, then append a blank line and the comment \"# TODO: document receipt totals\" to pricing.py without staging it."
+    },
+    {
+      "id": 10,
+      "prompt": "Outline pricing.py with a 10-byte scan budget. What can you conclude about its functions?",
+      "files": [
+        "fixtures/pricing-project/pricing.py"
+      ],
+      "expected_output": "Reports that the file exceeded the budget and its symbols remain unknown.",
+      "expectations": [
+        "Honors the byte budget",
+        "Distinguishes skipped input from a successful empty outline",
+        "Does not claim the file has no functions"
+      ]
+    },
+    {
+      "id": 11,
+      "prompt": "Change only the module docstring in pricing.py to \"Storefront pricing helpers.\"",
+      "files": [
+        "fixtures/pricing-project/pricing.py"
+      ],
+      "expected_output": "One docstring edit with no planning ceremony.",
+      "expectations": [
+        "Only the module docstring changes",
+        "No planning files or ledger created",
+        "No redundant repository tour"
+      ]
     }
   ]
 }

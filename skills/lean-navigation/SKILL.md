@@ -17,7 +17,7 @@ The default reply fits 1,600 characters and up to six matches. Python definition
 
 For a regression after local edits, add `--changed` to search current contents of staged, unstaged, and new unignored files. Check the diff around a hit to see whether the matching line actually changed. If the clue is absent, widen to callers or unchanged dependencies.
 
-A truncated search is partial. Refine the query if a missing result could change the answer. Use an outline for an unfamiliar long file, or a compact map for an architecture question with no search term. Keep raw logs and data local and return only the relevant count, error, or rows. Reuse prior reads until the file changes. Stop once the requested conclusion has supporting evidence.
+A partial outline or truncated search leaves unexamined code. An empty partial result cannot establish absence. Refine the query if a missing result could change the answer. Use an outline for an unfamiliar long file, or a compact map for an architecture question with no search term. Keep raw logs and data local and return only the relevant count, error, or rows. Reuse prior reads until the file changes. Stop once the requested conclusion has supporting evidence.
 
 ## Browser to source
 

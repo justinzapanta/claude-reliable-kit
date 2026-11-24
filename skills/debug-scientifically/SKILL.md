@@ -15,7 +15,7 @@ Find the cause before changing code. A fix you can't explain is a guess.
 4. **Cheapest test first.** For the top hypothesis, choose the quickest check that would confirm or kill it: a print, an assertion, a one-line script, a `git diff` of recent changes. Run it. Update the ranking.
 5. **Locate.** Narrow with `lean-navigation`: search the error string, then read only the relevant function. Bisect when the failure is "it used to work" (`git bisect`, or comment out halves).
 6. **Fix the cause**, not the symptom. Prefer the smallest change (see `minimal-change`). Don't suppress an exception just to silence it.
-7. **Confirm.** Rerun the reproduction and the nearby tests. Add a regression test when cheap.
+7. **Confirm.** Check the original reproduction and affected behavior. Reuse a TDD run covering the same input, code and environment. Add a regression test when cheap.
 8. **Explain in 3 lines:** root cause, the fix, how you verified.
 
 ## Common traps

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Tiny task ledger. Commands: init | add KIND TEXT [--src user|inferred] [--replace ID] | verify ID HOW | done ID | rm ID | show [--open] | export | trim
+"""Tiny task ledger. Commands: init | add KIND TEXT [--src user|inferred] [--replace ID] | verify ID HOW | done ID | rm ID | show [--open] | summary | get ID | export | trim
 Stores ledger.json in the current directory (override with LEDGER_FILE)."""
 import argparse, datetime, json, locale, os, sys, tempfile
 FILE = os.environ.get("LEDGER_FILE", "ledger.json")
@@ -48,6 +48,20 @@ def line(it):
     chk = f" -> {it['how']}" if it.get("how") else ""
     return f"{it['id']:>2} {mark} {it['kind']:<8} {it['text']}{src}{chk}"
 
+def summary(items):
+    """Keep every entry addressable within one compact resume view."""
+    pending = [it for it in items if it["kind"] in ("open", "req") and not it.get("done")]
+    header = f"{len(items)} entries, {len(pending)} pending. Expand with get ID."
+    print(header)
+    if not items:
+        return
+    width = min(200, (1600 - len(header) - 1) // len(items) - 1)
+    pending_ids = {it["id"] for it in pending}
+    for it in sorted(items, key=lambda it: it["id"] not in pending_ids):
+        row = " ".join(line(it).split())
+        print(row if len(row) <= width else row[:width - 3] + "...")
+
+
 def main():
     p = argparse.ArgumentParser(); sub = p.add_subparsers(dest="cmd", required=True)
     sub.add_parser("init")
@@ -57,6 +71,7 @@ def main():
     dn = sub.add_parser("done"); dn.add_argument("id", type=int)
     r = sub.add_parser("rm"); r.add_argument("id", type=int)
     s = sub.add_parser("show"); s.add_argument("--open", action="store_true")
+    sub.add_parser("summary"); sub.add_parser("get").add_argument("id", type=int)
     sub.add_parser("export"); sub.add_parser("trim")
     x = p.parse_args(); d = load()
 
@@ -81,6 +96,10 @@ def main():
         find(d, x.id)["done"] = True; save(d); print(f"done {x.id}")
     elif x.cmd == "rm":
         d["items"].remove(find(d, x.id)); save(d); print(f"removed {x.id}")
+    elif x.cmd == "summary":
+        summary(d["items"])
+    elif x.cmd == "get":
+        print(line(find(d, x.id)))
     elif x.cmd == "show":
         items = d["items"]
         if x.open: items = [i for i in items if i["kind"] in ("open", "req") and not i.get("done")]

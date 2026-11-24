@@ -23,8 +23,8 @@ A small file that stops you from losing requirements, repeating checks, or re-re
 1. **Start** (only if the task qualifies): `python scripts/ledger.py init`, then add each requirement as `req`.
 2. **During**: add `decision`, `loc`, and `open` entries as they happen. One short line each.
 3. **After a check passes**: `python scripts/ledger.py verify <id> "how it was checked"`. Don't re-verify items whose related code hasn't changed.
-4. **Before answering**: `python scripts/ledger.py show` and confirm every `req` is done and every `open` is either resolved or reported to the user.
-5. **Resuming**: point `LEDGER_FILE` at the saved JSON and run `show --open`. Read a Markdown export directly as a handoff.
+4. **Before answering**: `python scripts/ledger.py summary` and confirm every `req` is done and every `open` is either resolved or reported to the user.
+5. **Resuming**: point `LEDGER_FILE` at the saved JSON and run `summary` (1,600 characters, pending first). Expand a clipped entry with `get ID` only when needed. Read a Markdown export directly as a handoff.
 
 ## Lean memory rules (`pref` entries)
 
@@ -32,7 +32,7 @@ A small file that stops you from losing requirements, repeating checks, or re-re
 - Write only when: the user says "remember", the user corrects you, or a preference appears twice.
 - Newer facts overwrite older contradicting ones (the script's `add --replace <id>` does this).
 - Mark source: `--src user` (stated) or `--src inferred` (guessed). Check inferred entries before relying on them.
-- **Never store** passwords, API keys, financial account numbers, health details, or government IDs, unless the user explicitly asks and understands the risk.
+- **Never store secret values or sensitive personal data.** Record the configuration name or secret manager reference when the task needs it.
 - The user can see, edit, and delete everything. Show the ledger on request.
 
 ## Persistence (be honest with the user)

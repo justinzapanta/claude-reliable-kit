@@ -27,7 +27,7 @@ Ask yourself: "If I guess wrong, how much work is lost, and can I cheaply make t
 ## When you proceed on assumptions
 
 Put them first, briefly:
-"Assuming Python 3.11, PostgreSQL, and no auth for now. Tell me if any of that is wrong."
+"I’ll use the naming convention in the neighboring module."
 Then build. Make assumptions easy to change.
 
 ## Large tasks

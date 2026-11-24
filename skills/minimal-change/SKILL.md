@@ -9,6 +9,8 @@ The best change is the smallest one that fully solves the problem. Smaller diffs
 
 ## Rules
 
+Before editing, inspect working-tree status and relevant staged and unstaged diffs. Keep track of edits already present, including untracked files in scope.
+
 1. **Do what was asked, nothing more.** No bonus features, no extra configuration options, no speculative flexibility.
 2. **Edit, don't rewrite.** Use targeted edits to the lines that need to change. Don't regenerate a whole file to change a few lines.
 3. **Leave unrelated code alone.** No drive-by renames, reformatting, import reshuffling, or "cleanups". If you spot a real problem elsewhere, mention it in one line instead of fixing it.
@@ -19,7 +21,7 @@ The best change is the smallest one that fully solves the problem. Smaller diffs
 
 ## Before finishing
 
-- Look at your diff (`git diff` or compare) and ask of each hunk: "Was this required by the request?" Revert any that weren't.
+- Look at your diff (`git diff` or compare) and ask of each hunk: "Was this required by the request?" Undo only your own unrelated edits. Preserve existing work, including adjacent edits in the same file. Leave any hunk of uncertain ownership intact.
 - Make sure the diff is small enough that the user can read it in a minute or two. If it's big, explain why it can't be smaller.
 
 ## When a bigger change is right
