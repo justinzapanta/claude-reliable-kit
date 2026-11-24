@@ -47,17 +47,23 @@ def main():
     if a.max_chars < 200 or a.max_files < 1:
         p.error("--max-chars must be at least 200 and --max-files at least 1")
     base = Path(a.dir).resolve()
-    paths = []
+    if not base.is_dir():
+        p.error(f"expected an existing directory: {base}")
+    count = 0
+    truncated = False
     source_counts, areas = Counter(), Counter()
     manifests, entries = [], []
     for path in repo_files(base):
-        if len(paths) >= a.max_files:
+        if not path.is_file() or path.is_symlink():
+            continue
+        if count >= a.max_files:
+            truncated = True
             break
         try:
             rel = path.relative_to(base).as_posix()
         except ValueError:
             continue
-        paths.append(rel)
+        count += 1
         source = SOURCE_EXTS.get(path.suffix.lower())
         if source:
             source_counts[source] += 1
@@ -68,7 +74,7 @@ def main():
             manifests.append(rel)
         if path.stem.lower() in ENTRY_STEMS and source:
             entries.append(rel)
-    lines = [f"Repository map for {base}", f"Files indexed: {len(paths)}" + (" (file cap reached)" if len(paths) >= a.max_files else ""), "Source counts: " + (", ".join(f"{k} {v}" for k, v in source_counts.most_common(8)) or "none recognized"), "", "Key manifests and instructions:"]
+    lines = [f"Repository map for {base}", f"Files indexed: {count}" + (" (file cap reached)" if truncated else ""), "Source counts: " + (", ".join(f"{k} {v}" for k, v in source_counts.most_common(8)) or "none recognized"), "", "Key manifests and instructions:"]
     lines.extend(f"- {x}" for x in sorted(manifests)[:40] or ["(none found)"])
     lines.extend(["", "Likely entry points:"])
     lines.extend(f"- {x}" for x in sorted(entries)[:40] or ["(none recognized)"])

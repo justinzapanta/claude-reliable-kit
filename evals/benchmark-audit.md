@@ -2,7 +2,7 @@
 
 **Status:** no live model A/B runs have been performed. This checkout has no `claude` executable and no Anthropic API key, so recording Claude pass rates, token counts, or timing would be fabricated. This file is a source-based capability audit and a starting hypothesis for the live benchmark in [benchmark-plan.md](benchmark-plan.md), not proof that the kit improves Claude.
 
-**Fixture validation:** the six-case JSON suite parses, all referenced fixtures exist, IDs are unique, the pricing fixture's current three tests pass, and the review patch applies cleanly with `git apply --check`. These checks validate benchmark inputs only; they do not measure Claude or establish that any skill works better.
+**Fixture validation:** the original six-case JSON suite parsed, all referenced fixtures exist, IDs are unique, the pricing fixture's current three tests pass, and the review patch applies cleanly with `git apply --check`. These checks validate benchmark inputs only; they do not measure Claude or establish that any skill works better.
 
 Research checked on 24 November 2026. Claude Code behavior can change; record exact versions when running the benchmark.
 

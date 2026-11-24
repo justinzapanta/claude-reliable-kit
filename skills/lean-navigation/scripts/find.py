@@ -79,10 +79,13 @@ def main():
         p.error(f"invalid regex: {exc}")
 
     base = Path(a.dir).resolve()
+    if not base.is_dir():
+        p.error(f"expected an existing directory: {base}")
     exts = {"." + e.strip(".").lower() for e in a.ext.split(",") if e.strip(".")}
     results, scanned, bytes_read = [], 0, 0
     languages, areas, manifests, entries = Counter(), Counter(), [], []
     limited = False
+    unreadable = 0
     try:
         candidates = changed_files(base) if a.changed else files_under(base)
     except (OSError, subprocess.SubprocessError) as exc:
@@ -120,6 +123,7 @@ def main():
             scanned += 1
             text = content.decode("utf-8")
         except (UnicodeDecodeError, OSError):
+            unreadable += 1
             continue
         lines = text.splitlines()
         hits = [i for i, line in enumerate(lines) if rx.search(line)]
@@ -141,6 +145,8 @@ def main():
     out = [f"{total} matches in {len(results)} files; scanned {scanned} files / {bytes_read} bytes."]
     if a.changed:
         out[0] = "Local changes only: " + out[0]
+    if unreadable:
+        out[0] = f"Partial search: {unreadable} unreadable or non-UTF-8. " + out[0]
     shown = 0
     for path, lines, hits, definitions in results:
         if shown >= a.max_hits:

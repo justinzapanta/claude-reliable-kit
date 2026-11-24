@@ -59,3 +59,5 @@ Below the table, list model/runtime and skill/plugin versions, explain any missi
 ## Regression controls
 
 Apply each case’s optional setup in its fresh fixture copy before starting the session. For case 10, make the outline helper available to every arm at the same path and include its invocation in the prompt. Score preservation of pre-existing edits, correct handling of partial evidence, and simple-task overhead separately. For each arm report total tokens across all attempts divided by the number of correct outcomes, alongside the pass count. If none pass, report the ratio as undefined.
+
+To check the pricing fixture from its project directory (`evals/fixtures/pricing-project/`), run `python -m unittest discover -s tests`. The three baseline tests cover existing behavior. The rounding failure is intentional input for the repair cases.
