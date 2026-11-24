@@ -16,6 +16,9 @@ def package(skill):
     if "SKILL.md" not in files:
         raise ValueError(f"Missing SKILL.md in {skill}")
     files["LICENSE"] = (ROOT / "LICENSE").read_bytes()
+    for name in files:
+        if name == "LICENSE" or Path(name).suffix in {".md", ".py"}:
+            files[name] = files[name].replace(b"\r\n", b"\n")
     buf = io.BytesIO()
     with ZipFile(buf, "w") as archive:
         for name, data in sorted(files.items()):
