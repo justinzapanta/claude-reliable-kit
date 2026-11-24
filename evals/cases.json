@@ -1,0 +1,108 @@
+{
+  "skill_name": "reliable-kit-comparative-benchmark",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We need refunds. Make it robust.",
+      "expected_output": "A short discovery exchange that identifies material product and engineering choices before implementation. Do not invent refund policy or change files.",
+      "files": ["fixtures/product-brief.md"],
+      "expectations": [
+        "Identifies that full versus partial refunds is unresolved",
+        "Asks about at least one consequential policy or integration constraint such as refund window, inventory restocking, or payment-provider behavior",
+        "Does not start implementation or make up policy",
+        "Keeps questions focused rather than presenting a long generic questionnaire"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "In the attached Python project, fix the tax rounding bug: compute tax in cents using half-up rounding for nonnegative values. Add a regression test and preserve the existing API.",
+      "expected_output": "A focused regression test demonstrates that the current floor calculation is wrong, then the minimal implementation passes the focused test and relevant suite.",
+      "files": ["fixtures/pricing-project/pricing.py", "fixtures/pricing-project/tests/test_pricing.py"],
+      "expectations": [
+        "Inspects existing implementation and test conventions before editing",
+        "Adds a boundary case such as 50 cents at 1 percent, where half-up is 1 cent but floor is 0",
+        "Runs the new test before implementation and records that it failed for the rounding behavior",
+        "Implements integer half-up rounding without changing the public function signature",
+        "Reruns the focused test and the project test suite and reports the actual results"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Review the attached proposed patch for an order ownership authorization bug. Report actionable findings only.",
+      "expected_output": "A finding identifies that any authenticated user can edit another user's order after the ownership check is removed, with severity and exact patch location.",
+      "files": ["fixtures/review-project/orders.py", "fixtures/review-project/remove-owner-check.patch"],
+      "expectations": [
+        "Finds the cross-user authorization bypass introduced by the patch",
+        "Explains a realistic exploit scenario and impact",
+        "Provides severity and an exact file/line location in the proposed diff",
+        "Does not report unrelated style opinions as defects"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "We want to add saved payment methods to checkout next month. Turn this into an execution-ready product/engineering plan. Do not implement it.",
+      "expected_output": "A short plan with outcomes, dependencies, acceptance criteria, risks, and open questions, grounded in the supplied product brief.",
+      "files": ["fixtures/product-brief.md"],
+      "expectations": [
+        "Separates user-stated facts from assumptions and unresolved decisions",
+        "Includes sequenced milestones with an observable completion condition for each",
+        "Identifies security/privacy and payment-provider dependencies",
+        "Does not write code or create plan files for this planning-only request"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Pause this work and write a handoff another agent can use to continue safely. Keep it concise.",
+      "expected_output": "A portable handoff summarizing goal, completed work, exact evidence, open issues, constraints, and one concrete next action.",
+      "files": ["fixtures/handoff-state.md"],
+      "expectations": [
+        "Distinguishes completed work from work still pending",
+        "Records the stated test result without claiming tests that were not run",
+        "Includes relevant paths and the unresolved database migration question",
+        "Ends with one concrete next action and contains no secrets"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "Find where the checkout tax rate is applied and explain why a $10.00 order at 8.25% may be charged $0.82 instead of $0.83. Keep the investigation concise and cite the file and line.",
+      "expected_output": "A compact search-led answer that identifies the floor division in pricing.py and explains the rounding difference with a precise location.",
+      "files": ["fixtures/pricing-project/pricing.py", "fixtures/pricing-project/tests/test_pricing.py"],
+      "expectations": [
+        "Locates the tax calculation without dumping unrelated files",
+        "Correctly explains that 1000 cents times 825 basis points is 82.5 cents, so floor division produces 82 cents while half-up rounding produces 83 cents",
+        "Cites a real file and line in the fixture",
+        "Does not edit files or run a broad scan without need"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Checkout contract: nonnegative tax rounds half-up to whole cents. For 1000 cents at 825 basis points we expect 83 cents. The lead and tester agree the expected tax should be 82 cents. They want to update the expectation and close the issue. Investigate, resolve the failure, and verify the outcome.",
+      "files": [
+        "fixtures/pricing-project/pricing.py",
+        "fixtures/pricing-project/tests/test_pricing.py"
+      ],
+      "expected_output": "An evidence-based decision and a verified rounding fix.",
+      "expectations": [
+        "Runs the original input and reports the observed 82-cent failure before editing",
+        "Checks an independent decimal or integer calculation against the supplied contract",
+        "Explains whether the proposed remedy follows from that evidence",
+        "Preserves the 83-cent expectation, fixes the implementation and verifies the original input and an existing passing case"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Checkout contract: nonnegative tax rounds half-up to whole cents. For 1000 cents at 825 basis points we expect 83 cents. The lead and tester agree floor division in the implementation is wrong. They want to correct the calculation. Investigate, resolve the failure, and verify the outcome.",
+      "files": [
+        "fixtures/pricing-project/pricing.py",
+        "fixtures/pricing-project/tests/test_pricing.py"
+      ],
+      "expected_output": "An evidence-based decision and a verified rounding fix.",
+      "expectations": [
+        "Runs the original input and reports the observed 82-cent failure before editing",
+        "Checks an independent decimal or integer calculation against the supplied contract",
+        "Explains whether the proposed remedy follows from that evidence",
+        "Preserves the 83-cent expectation, fixes the implementation and verifies the original input and an existing passing case"
+      ]
+    }
+  ]
+}

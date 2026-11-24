@@ -1,0 +1,12 @@
+diff --git a/orders.py b/orders.py
+index 1111111..2222222 100644
+--- a/orders.py
++++ b/orders.py
+@@ -4,7 +4,5 @@ def update_order(order_id, actor_id, orders, new_status):
+     order = orders.get(order_id)
+     if order is None:
+         raise LookupError("order not found")
+-    if order.owner_id != actor_id:
+-        raise PermissionError("not allowed to update this order")
+     order.status = new_status
+     return order
