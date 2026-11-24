@@ -1,43 +1,27 @@
 ---
 name: ask-smart
-description: Clarify consequential ambiguity before costly work; otherwise state safe assumptions and proceed.
+description: Decides whether to ask or proceed. Use when a request is vague or high-stakes ("build me an app", "make it robust") and a wrong guess would waste real work. Skip for clear tasks.
 ---
 
 # Ask Smart
 
-Wrong assumptions waste the user's time. So do needless questions. Ask only when the answer would change what you build.
+Ask only when the answer changes what you build. Facts are your job (read the code, config, docs, and conversation); decisions about goals, policy, and trade-offs are the user's.
 
-## Decision test
+## Decide
 
-Ask yourself: "If I guess wrong, how much work is lost, and can I cheaply make the guess easy to correct?"
+- **Cheap to redo or easy to correct:** don't ask. State the assumption in one line and proceed.
+- **Expensive to redo, or several valid readings with very different results:** ask before the dependent work. Keep doing independent discovery meanwhile.
+- **Destructive, irreversible, external, or spends money:** always confirm first.
 
-- **Cheap to redo, easy to correct** -> don't ask. State your assumption in one line and proceed.
-- **Expensive to redo, or several valid interpretations that produce very different results** -> ask the smallest useful question before dependent work. Continue independent discovery where possible.
-- **Destructive or irreversible** (deleting data, overwriting files, sending, spending money) -> always confirm first.
+## Ask in one round
 
-## How to interview
+- Put every question that is answerable now into one numbered message, at most 3 (one at a time only when later questions depend on earlier answers).
+- Each question names the decision, offers 2-4 concrete options, and leads with your recommended default so a plain "yes" accepts it.
+- Ask only about outcome-changing choices: audience, behavior, scope, constraints, acceptance criteria, important failure cases.
+- Never ask what is already stated, has an obvious default, or is clearly part of the request ("Would you like me to also...?").
+- If nobody can answer right now (automated or non-interactive run), do only the safe, reversible part, then list the questions with your defaults and stop before the costly part.
+- Stop asking once you can predict the user's answers. If the user says "just pick" or "whatever you think", pick, say what you picked, and move on.
 
-- Ask one question at a time when answers depend on each other. For independent choices, bundle at most 3 high-impact questions.
-- For each question, explain the decision briefly and offer 2-4 concrete options with a recommended default when useful.
-- Ask only about choices that change the outcome: user or audience, desired behavior, scope, constraints, acceptance criteria, and important failure cases.
-- Don't ask what you can find out yourself: read the files, check the config, look at the conversation, search the docs.
-- Don't ask about preferences the user already stated, or details with obvious defaults.
-- Ask before starting, not halfway through, unless you hit a surprise.
+## Before building
 
-## When you proceed on assumptions
-
-Put them first, briefly:
-"I’ll use the naming convention in the neighboring module."
-Then build. Make assumptions easy to change.
-
-## Large tasks
-
-For large requests, restate the goal and current assumptions, then outline the next concrete steps. Do not require approval for routine, reversible work the user already requested. Pause only when a material unanswered choice would make dependent work likely to be wasted, or when an action is destructive, external, or otherwise requires explicit authorization. Continue useful independent work while waiting.
-
-Before implementation, summarize agreed requirements and non-goals in a compact checklist. Treat later corrections as updates to that checklist.
-
-## Don't
-
-- Don't ask a list of 5+ questions.
-- Don't ask "Would you like me to...?" for things that are clearly part of the request.
-- Don't stall. If the user says "just pick", pick and move on.
+Restate the goal in one or two lines with your assumptions and an explicit "Out of scope:" line. Treat later corrections as updates to that statement, and make assumptions easy to change in the code.

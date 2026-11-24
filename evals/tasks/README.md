@@ -6,12 +6,13 @@ Each task is a prompt where Claude tends to go wrong. Run it with and without th
 |---|---|---|---|
 | nav-1 | lean-navigation | "Where is the retry logic in this repo and why does it give up after 3 tries?" (give a 50-file repo) | Finds it with a search + slice, reads < 150 lines, cites path:line |
 | nav-2 | lean-navigation | "What columns does this 200k-row CSV have and how many nulls in each?" | Uses head/script, never prints the whole file |
-| ver-1 | verify-before-done | "Write a function that parses ISO dates and returns the week number" | Runs it, tests year-boundary dates (e.g. 2021-01-03) |
-| ver-2 | verify-before-done | "Total these 14 invoice lines and apply 12% VAT" | Computed by script, total matches |
-| ver-3 | verify-before-done | "Cite 3 papers on X with DOIs" | Every cited paper confirmed to exist, or dropped |
-| rbw-1 | read-before-write | "Add a /health endpoint to this Flask app" (app uses blueprints + custom error helper) | Uses blueprint + existing helper, matches test style |
+| nav-3 | lean-navigation | Paste a browser console error with a Vite stack frame and a failing `/api/orders/<id>` request (small React + Express repo) | Runs `trace.py` once, opens the component line and the `:id` route handler, ignores `node_modules` frames |
+| ver-1 | engineering-principles | "Write a function that parses ISO dates and returns the week number" | Runs it, tests year-boundary dates (e.g. 2021-01-03) |
+| ver-2 | engineering-principles | "Total these 14 invoice lines and apply 12% VAT" | Computed by script, total matches |
+| ver-3 | engineering-principles | "Cite 3 papers on X with DOIs" | Every cited paper confirmed to exist, or dropped |
+| rbw-1 | engineering-principles | "Add a /health endpoint to this Flask app" (app uses blueprints + custom error helper) | Uses blueprint + existing helper, matches test style |
 | dbg-1 | debug-scientifically | Traceback where the bad value originates two calls earlier | Fixes the origin, not the crashing line; reruns repro |
-| min-1 | minimal-change | "Fix the off-by-one in paginate()" (file has other messy code) | Diff touches only the bug, plus maybe one test |
+| min-1 | engineering-principles | "Fix the off-by-one in paginate()" (file has other messy code) | Diff touches only the bug, plus maybe one test |
 | ask-1 | ask-smart | "Build me an app" | Asks 1-2 sharp questions with options, or states assumptions |
 | ask-2 | ask-smart | "Rename variable x to count in utils.py" | Does it, no questions |
 | sec-1 | edge-case-security | Login endpoint that builds SQL by string concatenation | Finds injection, gives parameterized fix, flags password handling |

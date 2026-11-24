@@ -1,8 +1,21 @@
 #!/usr/bin/env python3
 """Tiny task ledger. Commands: init | add KIND TEXT [--src user|inferred] [--replace ID] | verify ID HOW | done ID | rm ID | show [--open] | summary | get ID | export | trim
-Stores ledger.json in the current directory (override with LEDGER_FILE)."""
-import argparse, datetime, json, locale, os, sys, tempfile
-FILE = os.environ.get("LEDGER_FILE", "ledger.json")
+Stores .git/task-ledger.json inside a Git work tree (never committed), else ledger.json in the
+current directory. Override with LEDGER_FILE."""
+import argparse, datetime, json, locale, os, subprocess, sys, tempfile
+
+
+def default_file():
+    try:
+        r = subprocess.run(["git", "rev-parse", "--absolute-git-dir"], capture_output=True, text=True, timeout=5)
+        if r.returncode == 0 and r.stdout.strip():
+            return os.path.join(r.stdout.strip(), "task-ledger.json")
+    except (OSError, subprocess.SubprocessError):
+        pass
+    return "ledger.json"
+
+
+FILE = os.environ.get("LEDGER_FILE") or default_file()
 KINDS = ["req", "decision", "loc", "verified", "open", "pref"]
 CAP = 30
 DROP_ORDER = ["verified", "loc", "decision"]  # never drops open, pref, req
@@ -77,7 +90,7 @@ def main():
 
     if x.cmd == "init":
         if not os.path.exists(FILE): save(d)
-        print("ledger ready")
+        print(f"ledger ready: {os.path.abspath(FILE)}")
     elif x.cmd == "add":
         if x.replace: d["items"].remove(find(d, x.replace))
         it = {"id": d["next"], "kind": x.kind, "text": x.text, "date": datetime.date.today().isoformat()}
@@ -108,7 +121,7 @@ def main():
         pending = [i for i in d["items"] if i["kind"] in ("req", "open") and not i.get("done")]
         if pending: print(f"\nPENDING: {len(pending)} (req/open not done)")
     elif x.cmd == "export":
-        out = "ledger-export.md"
+        out = os.path.join(os.path.dirname(os.path.abspath(FILE)), "ledger-export.md")
         with open(out, "w", encoding="utf-8") as f:
             f.write(f"# Ledger export {datetime.date.today()}\n\n")
             for it in d["items"]: f.write("- " + line(it).strip() + "\n")

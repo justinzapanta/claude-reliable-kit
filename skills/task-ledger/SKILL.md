@@ -1,6 +1,6 @@
 ---
 name: task-ledger
-description: Keep a compact task ledger only when work spans sessions, many decisions, or likely context loss; avoid duplicate notes.
+description: Keeps a small requirements-and-decisions ledger. Use for long tasks with many requirements, work spanning sessions, or risk of losing context. Skip for short tasks.
 ---
 
 # Task Ledger and Lean Memory
@@ -20,25 +20,18 @@ A small file that stops you from losing requirements, repeating checks, or re-re
 
 ## Workflow
 
-1. **Start** (only if the task qualifies): `python scripts/ledger.py init`, then add each requirement as `req`.
-2. **During**: add `decision`, `loc`, and `open` entries as they happen. One short line each.
-3. **After a check passes**: `python scripts/ledger.py verify <id> "how it was checked"`. Don't re-verify items whose related code hasn't changed.
-4. **Before answering**: `python scripts/ledger.py summary` and confirm every `req` is done and every `open` is either resolved or reported to the user.
-5. **Resuming**: point `LEDGER_FILE` at the saved JSON and run `summary` (1,600 characters, pending first). Expand a clipped entry with `get ID` only when needed. Read a Markdown export directly as a handoff.
+The helper is `scripts/ledger.py` in this skill's folder. Call it by full path from the project directory (`${CLAUDE_SKILL_DIR}` is this skill's folder; outside Claude Code use the folder this file is in); below, `ledger` means `python ${CLAUDE_SKILL_DIR}/scripts/ledger.py`.
 
-## Lean memory rules (`pref` entries)
+1. **Start** (only if the task qualifies): `ledger init`, then `ledger add req "..."` for each requirement.
+2. **During**: `ledger add decision|loc|open "..."` as things happen. One short line each.
+3. **After a check passes**: `ledger verify <id> "how it was checked"`. Mark a finished requirement with `ledger done <id>`. Don't re-verify items whose related code hasn't changed.
+4. **Before answering**: `ledger summary` and confirm every `req` is done and every `open` is either resolved or reported to the user.
+5. **Resuming**: run `ledger summary` (1,600 characters, pending first) from the same project. Expand a clipped entry with `ledger get <id>` only when needed. Read a Markdown export directly as a handoff.
 
-- Store **conclusions, not conversations**: "prefers Python + FastAPI, replies in Tagalog-English mix", not the chat that showed it.
-- Write only when: the user says "remember", the user corrects you, or a preference appears twice.
-- Newer facts overwrite older contradicting ones (the script's `add --replace <id>` does this).
-- Mark source: `--src user` (stated) or `--src inferred` (guessed). Check inferred entries before relying on them.
-- **Never store secret values or sensitive personal data.** Record the configuration name or secret manager reference when the task needs it.
-- The user can see, edit, and delete everything. Show the ledger on request.
+## Memory and persistence
 
-## Persistence (be honest with the user)
-
-Local JSON persists in the project directory. In a temporary workspace, save the JSON to resume with the helper, or use `export` for a readable Markdown handoff. If the platform's Memory feature is on, prefer that for `pref` entries.
+Inside a Git project the ledger is `.git/task-ledger.json` (persists, never committed); elsewhere `ledger.json`; `LEDGER_FILE` overrides. Before adding a `pref` entry or resuming a saved ledger, read [references/memory.md](references/memory.md). Never store secret values.
 
 ## Keep it small
 
-If it nears 30 entries, run `python scripts/ledger.py trim` (drops the oldest verified/loc/decision entries first, never `open` or `pref`). Merge duplicates by hand.
+If it nears 30 entries, run `ledger trim` (drops the oldest verified/loc/decision entries first, never `open` or `pref`). Merge duplicates by hand.

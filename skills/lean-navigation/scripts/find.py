@@ -2,6 +2,7 @@
 """Bounded regex search. Usage: find.py REGEX [DIR] [--ext py,js] [--max-hits 6] [--max-chars 1600]"""
 import argparse
 import ast
+import difflib
 import os
 import re
 import subprocess
@@ -13,6 +14,21 @@ SKIP_EXT = (".lock", ".min.js", ".map", ".png", ".jpg", ".jpeg", ".gif", ".pdf",
 LANGS = {".py": "py", ".js": "js", ".jsx": "js", ".ts": "ts", ".tsx": "ts", ".go": "go", ".rs": "rs", ".java": "java", ".kt": "kt", ".cs": "cs", ".rb": "rb", ".php": "php", ".swift": "swift", ".vue": "vue", ".svelte": "svelte"}
 MANIFESTS = {"pyproject.toml", "requirements.txt", "package.json", "pnpm-workspace.yaml", "go.mod", "Cargo.toml", "pom.xml", "build.gradle", "build.gradle.kts", "Gemfile", "composer.json", "Makefile", "Dockerfile", "AGENTS.md", "CLAUDE.md", "README.md"}
 ENTRY_STEMS = {"main", "app", "server", "index", "cli", "__main__", "manage"}
+IDENT = re.compile(r"[A-Za-z_][A-Za-z0-9_]{2,}")
+
+
+def definition_rx(name):
+    """Match common non-Python definitions of NAME (JS/TS, Go, Rust, Java-like, Ruby, PHP)."""
+    n = re.escape(name)
+    return re.compile(
+        r"^\s*(?:export\s+)?(?:default\s+)?(?:pub(?:\([^)]*\))?\s+)?(?:public\s+|private\s+|protected\s+|static\s+|abstract\s+)*"
+        r"(?:async\s+)?(?:function\*?|class|interface|type|enum|struct|trait|impl|fn|func(?:\s*\([^)]*\))?|def|const|let|var|module)\s+" + n + r"(?![\w$])"
+        r"|^\s*(?:export\s+)?(?:const|let|var)?\s*" + n + r"\s*[:=]\s*(?:async\s*)?(?:function|\([^)]*\)\s*=>|\w+\s*=>)")
+
+
+def is_test(rel):
+    s = "/" + rel.as_posix().lower()
+    return "/test" in s or ".test." in s or ".spec." in s or "__tests__" in s or s.endswith("_test.go")
 
 
 def files_under(base):
@@ -86,6 +102,9 @@ def main():
     languages, areas, manifests, entries = Counter(), Counter(), [], []
     limited = False
     unreadable = 0
+    want_idents = a.symbol or bool(re.fullmatch(r"[A-Za-z_]\w*", a.pattern))
+    idents = set()
+    def_rx = definition_rx(a.pattern) if a.symbol else None
     try:
         candidates = changed_files(base) if a.changed else files_under(base)
     except (OSError, subprocess.SubprocessError) as exc:
@@ -125,6 +144,8 @@ def main():
         except (UnicodeDecodeError, OSError):
             unreadable += 1
             continue
+        if want_idents and len(idents) < 200_000:
+            idents.update(IDENT.findall(text))
         lines = text.splitlines()
         hits = [i for i, line in enumerate(lines) if rx.search(line)]
         if hits:
@@ -138,9 +159,11 @@ def main():
                     definitions = {node.lineno - 1 for node in ast.walk(tree)
                                    if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef))
                                    and rx.fullmatch(node.name)}
+            elif a.symbol:
+                definitions = {i for i in hits if def_rx.search(lines[i])}
             hits.sort(key=lambda i: (i not in definitions, i))
             results.append((path.relative_to(base), lines, hits, definitions))
-    results.sort(key=lambda row: (not bool(row[3]), -len(row[2]), str(row[0]).casefold()))
+    results.sort(key=lambda row: (not bool(row[3]), is_test(row[0]), -len(row[2]), str(row[0]).casefold()))
     total = sum(len(row[2]) for row in results)
     out = [f"{total} matches in {len(results)} files; scanned {scanned} files / {bytes_read} bytes."]
     if a.changed:
@@ -176,6 +199,13 @@ def main():
             break
     if total > shown or limited:
         out.append(f"\nTruncated: {total - shown} matches not shown" + ("; scan limit reached" if limited else ". Narrow with --ext, a subdirectory, or a more specific pattern."))
+    if total == 0 and want_idents and idents:
+        lower = {}
+        for name in idents:
+            lower.setdefault(name.lower(), name)
+        close = difflib.get_close_matches(a.pattern.lower(), list(lower), n=6, cutoff=0.75)
+        if close:
+            out.append("No exact match. Similar names in scanned files: " + ", ".join(lower[c] for c in close))
     if a.map:
         out.extend(["", "Repo overview (paths/counts only; based on scanned scope):", "Languages: " + (", ".join(f"{k} {v}" for k, v in languages.most_common(6)) or "none recognized"), "Areas: " + (", ".join(f"{k} {v}" for k, v in areas.most_common(8)) or "none"), "Key files: " + (", ".join(sorted(set(manifests + entries))[:20]) or "none recognized")])
     rendered = "\n".join(out)

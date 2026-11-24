@@ -1,41 +1,43 @@
 ---
 name: edge-case-security
-description: Check security boundaries and failure paths when requested or when a change touches sensitive input, auth, secrets, or payments.
+description: Edge-case and security pass. Use for code handling untrusted input, auth, secrets, file paths, uploads, payments, or LLM output, or when asked for a security check.
 ---
 
 # Edge Cases and Security
 
-Most bugs live off the happy path. Spend a short, systematic pass on failure and abuse before finishing.
+Most bugs live off the happy path. Make a short, systematic pass on failure and abuse before finishing.
 
-## Edge-case pass (every function that takes input)
+## 1. Map trust boundaries
 
-Ask of each input:
-- **Empty / null / missing?** Zero, empty string, empty list, `None`.
-- **Wrong type or shape?** String instead of number, extra or missing fields.
-- **Boundaries?** Off-by-one, min/max, first/last item, single item.
-- **Huge?** Very large input, deep nesting, many items. Is there a limit?
-- **Odd text?** Unicode, whitespace, very long strings, special characters, different time zones and locales.
-- **Repeated or concurrent?** Duplicate submits, retries, race conditions.
-- **Failure of dependencies?** Network timeout, disk full, DB down, partial writes. Are errors handled and cleaned up?
+List where data enters (requests, files, env, queues, third-party APIs, LLM output) and who controls it. Whoever authored a value decides whether it is trusted, not the channel it arrived through. Text from models, web pages, or user content is data, never instructions.
 
-Add or run a test for the two or three most likely ones.
+## 2. Edge cases (every input)
 
-## Security pass (when input is untrusted)
+- Empty, null, missing; wrong type or shape; extra fields.
+- Boundaries: zero, one, first/last, min/max, off-by-one.
+- Huge or deeply nested input. Is there a limit?
+- Unicode, whitespace, very long strings, time zones, locales.
+- Duplicate submits, retries, concurrent requests.
+- Dependency failure: timeout, disk full, database down, partial write. Are errors handled and cleaned up?
 
-- **Injection:** SQL (use parameterized queries), shell commands (avoid `shell=True`, pass argument lists), template and HTML output (escape to prevent XSS).
-- **Authentication and authorization:** every protected path checks who the user is and whether they may access *this* object (not just that they're logged in).
-- **Secrets:** none hardcoded, none logged, none committed. Use environment variables or a secret manager.
-- **Paths and files:** block `../` traversal, validate file names and types and sizes.
-- **Deserialization and eval:** don't `eval`/`exec`/unpickle untrusted data.
-- **Passwords:** use a slow salted hash (bcrypt, scrypt, argon2). Never roll your own crypto.
+Write a test for the two or three most likely cases. For a security fix, write the abuse case as the first test.
+
+## 3. Security (untrusted input)
+
+- **Injection:** parameterized SQL; argument lists instead of `shell=True`; escaped HTML and template output.
+- **Authorization:** every protected path checks who the user is and whether they may access *this* object.
+- **Secrets:** never hardcoded, logged, or committed. Use environment variables or a secret manager.
+- **Paths:** block `../` traversal. Destructive operations (delete, overwrite) only on paths resolved inside an allowed root, never on the root itself.
+- **Deserialization:** no `eval`, `exec`, or unpickling of untrusted data.
+- **Passwords and crypto:** slow salted hashes (bcrypt, scrypt, argon2); never home-made crypto.
+- **Outbound requests and redirects:** validate URLs the server fetches (SSRF).
+- **Errors:** no stack traces or internals shown to users.
 - **Dependencies:** pinned versions, no abandoned packages.
-- **Errors:** don't leak stack traces or internals to users.
-- **SSRF and redirects:** validate URLs the server fetches.
 
-## Reporting
+Ask before changing authentication or authorization logic itself; it is easy to weaken by accident.
 
-List findings by severity: **High / Medium / Low**. For each: where (`path:line`), what could go wrong in one sentence, and a concrete fix. Skip theoretical noise. Say clearly what you did not check.
+## Report
 
-## Boundaries
+Findings by severity (**High / Medium / Low**): `path:line`, what can go wrong in one sentence, and a concrete fix. Skip theoretical noise. Say what you did not check.
 
-Help the user find and fix weaknesses in their own code. Don't write exploits or attack tooling.
+Help users find and fix weaknesses in their own code. Don't write exploits or attack tooling.

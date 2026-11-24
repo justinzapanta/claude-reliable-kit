@@ -1,28 +1,32 @@
 ---
 name: review-changes
-description: Review a diff on request or before release for concrete correctness, regression, and security defects.
+description: Reviews a diff, PR, branch, or commit for real defects: correctness, regressions, security, missed requirements. Use when asked to review or before a release.
 ---
 
 # Review Changes
 
-Review the change as a skeptical maintainer. The goal is to find defects introduced by the diff, not to restate style preferences.
+Review as a skeptical maintainer. Find defects the change introduces, not style preferences. Zero findings is a valid result.
 
-## Review sequence
+## Sequence
 
-1. Establish the diff and its scope. Read the relevant surrounding code, tests, and stated requirements; avoid reading unrelated files.
-2. Trace changed behavior through its callers and data boundaries. Check error paths, state changes, concurrency, compatibility, and security where relevant.
-3. Run focused checks only when authorized and practical. Treat test output as evidence, not proof that untested paths are correct.
-4. Report findings first, ordered by severity. Each finding must identify a concrete scenario, the consequence, and a file and line location in the diff.
+1. **Confirm the target.** The ref resolves (or the patch file applies to the files it names), the diff is not empty, and the checkout is on the reviewed code before running anything. Read the surrounding code, tests, and stated requirements; skip unrelated files.
+2. **Spec check.** If there is a spec, issue, or request: list requirements the diff misses and changes nobody asked for, quoting the requirement line. A spec being silent about a case does not make breaking it acceptable.
+3. **Trace behavior.** Follow changed code through its callers and data boundaries. Check error paths, state changes, concurrency, compatibility, and security where relevant.
+4. **Probe tests** (when authorized and practical). Run focused tests. For a key new condition, invert it briefly and rerun: if the tests stay green, a test is missing. Restore it. Test output is evidence, not proof for untested paths.
 
-## Finding bar
+## Severity bar
 
-- **Critical:** likely severe data loss, security compromise, or service outage.
-- **High:** major behavior is broken for a realistic case, or an important security boundary is bypassed.
+- **Critical:** likely severe data loss, security compromise, or outage.
+- **High:** major behavior broken in a realistic case, or an important security boundary bypassed.
 - **Medium:** meaningful but limited bug, regression, or missing failure handling.
-- **Low:** minor correctness issue with a concrete impact.
+- **Low:** minor correctness issue with concrete impact.
 
-Only report issues that the author can act on. Don't report hypothetical risks without a credible trigger, formatting preferences, or pre-existing problems unless they make this change unsafe. If no findings meet the bar, say so, then name important checks not performed. Do not claim "no bugs".
+Report only what the author can act on, with a credible trigger. Label pre-existing defects separately from new regressions, and include them only if they make this change unsafe.
 
 ## Output
 
-For each finding: `[Severity] Short title` — scenario and impact; `path:line`; a concise suggested fix when clear. End with checks run and relevant coverage gaps. If the request was for an explanation rather than a formal review, adapt the format.
+For each finding: `[Severity] Short title`: scenario and impact; `path:line`; a concise fix when clear. Then a short "Not judged" line for anything you set aside, and the checks you ran. Never claim "no bugs"; say what was and was not examined.
+
+## Receiving review feedback
+
+Check each suggestion against the codebase before acting (search for real usages before "implementing properly"). Clarify every unclear item before changing anything, and push back with evidence when a suggestion is wrong.

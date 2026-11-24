@@ -31,6 +31,10 @@ This table compares the written scope of each workflow. “Overlap” means Clau
 
 References: [Superpowers](https://github.com/obra/superpowers) (including [TDD](https://github.com/obra/superpowers/blob/main/skills/test-driven-development/SKILL.md) and [systematic debugging](https://github.com/obra/superpowers/blob/main/skills/systematic-debugging/SKILL.md)); [Matt Pocock's skills](https://github.com/mattpocock/skills); [planning-with-files](https://github.com/OthmanAdi/planning-with-files); [Karpathy-inspired guidelines](https://github.com/multica-ai/andrej-karpathy-skills).
 
+## Changes applied after this audit
+
+Following recommendation 3, `minimal-change`, `read-before-write`, and `verify-before-done` were merged into `engineering-principles`, taking the kit from 13 to 10 skills and cutting always-loaded description text. All descriptions now state when to use and when to skip each skill. The rows below describe the pre-merge kit; re-run the comparison before citing them.
+
 ## Preliminary recommendations
 
 1. Run matched evals before describing the kit as more reliable or cheaper. The README now says it is designed to reduce rework and context, and explicitly says savings have not been measured.

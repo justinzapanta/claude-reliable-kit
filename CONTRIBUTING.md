@@ -6,13 +6,16 @@ For a workflow change, edit the relevant folder under `skills/`. Add a case in `
 
 For claims about cost or reliability, run the same prompt in fresh sessions with and without the skill. Capture correctness, tool calls and reported token usage for both, including failures. Use the [benchmark plan](evals/benchmark-plan.md) for comparisons across models or projects.
 
-## Package a change
+## Test and package a change
 
 Run these commands from the kit directory with Python 3. They use the standard library.
 
 ```sh
+python -m unittest discover -s tests -v
 python tools/package_skills.py
 python tools/package_skills.py --check
 ```
+
+`tests/test_scripts.py` exercises every helper script on temporary projects (Git-dependent cases skip when Git is missing). `tests/test_skills.py` lints each `SKILL.md`: portable frontmatter, a "Use when" description of at most 200 characters, body size, working links and script paths, references to other kit skills, the README catalog, and one release ZIP per skill. Run the tests before packaging; the suite also confirms the ZIPs match the sources.
 
 The builder puts one ZIP per skill under `releases/`, including the MIT license. The check compares packaged file names and contents with the editable sources. In your pull request, include the failure that motivated the change, the affected skill and the checks you actually ran.

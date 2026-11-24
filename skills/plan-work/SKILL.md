@@ -1,27 +1,41 @@
 ---
 name: plan-work
-description: Coordinate product, engineering, delivery, and QA decisions for complex work or a requested team review.
+description: Plans multi-step work. Use for features, migrations, or integrations spanning several files or systems, or when asked for a plan or roadmap. Skip for a clear local edit.
 ---
 
 # Plan Work
 
-For a clear local edit, go directly to the change and its focused check. For complex work, have one assistant own the outcome. Select the questions below that could change the decision. Keep one working plan.
+A plan holds only the decisions an implementer could not make alone. For a clear local edit, skip planning and make the change.
 
-## Decide
+## Decide what matters
 
-- Product: Who benefits, and what observable result would make this worth shipping? If the answer depends on a policy only the user can set, ask one focused question.
-- Engineering: Trace the affected code path. Where two approaches are credible, compare the simplest viable one with its strongest alternative on the constraint that matters. Identify evidence that would reverse the choice.
-- Delivery: Find the dependency most likely to invalidate the plan. Check it early. Sequence the smallest end-to-end change that delivers the outcome. For a hard-to-reverse change, identify a recovery path.
-- QA: Identify a plausible case where the change appears to work but fails the user. Choose a check that distinguishes that failure from success.
+Answer only the questions that could change the plan:
 
-## Resolve disagreement
+- **Product:** who benefits, and what observable result makes this worth shipping? If it depends on a policy only the user can set, ask one focused question (see `ask-smart`).
+- **Engineering:** trace the affected code path. Where two approaches are credible, compare the simplest viable one with its strongest alternative on the constraint that matters, and name the evidence that would reverse the choice.
+- **Delivery:** find the dependency most likely to break the plan and check it first. For a hard-to-reverse change, name the rollback path.
+- **QA:** name a case where the change looks done but fails the user, and the check that tells them apart.
 
-When a test fails or a consequential decision rests on an assumption, write the acceptance criterion from the requirement first. Treat a proposed diagnosis as a hypothesis, even if the lead or user favors it. Choose the strongest plausible competing explanation and a check where the two predict different outcomes. Run that check when available. If it contradicts the preferred plan, change the plan. If both fit, keep the decision open and name the missing observation. Agreement is appropriate when evidence settles the question. One concrete counterexample is enough to reopen a decision.
+## Write the plan
+
+Slice the work vertically: each step delivers something runnable end to end. For each step:
+
+```
+N. <outcome>
+   Files: <paths to create or change, or "unknown until step N" if no code is available>
+   Interfaces: <what it consumes and produces, if other steps depend on it>
+   Verify: <command or check> -> <expected result>
+```
+
+End with risks and open questions, each with an owner (you or the user).
+
+## Self-check before sharing
+
+- Every stated requirement maps to a step.
+- Names and types stay consistent across steps.
+- No placeholder steps ("handle edge cases", "add tests"): name the cases and the tests.
+- The plan is shorter than the code it describes.
 
 ## Execute
 
-Respect the requested scope. For implementation work, carry the decision through the edit and the relevant checks. For a planning request, deliver milestones with observable acceptance criteria. Reuse search results and checks already in context. Load another skill only when a specific unresolved question needs its workflow.
-
-Keep discussion internal. Return one decision or delivered result, its evidence, and any remaining uncertainty that affects the user. Stop exploring when further information would no longer change the decision. Record a handoff only when work must continue later.
-
-Example: For checkout retries, establish whether a timeout can follow a successful charge. Inspect the existing payment identifier and retry path. If the provider supports idempotency, reuse the same key for the same purchase. Verify that a simulated timeout and retry produces one charge. An unresolved provider guarantee belongs in the delivery decision.
+Respect the requested scope. For a planning-only request, deliver the plan and stop; don't create files unless asked. For implementation, carry each step through its Verify line before starting the next. When evidence contradicts the plan, change the plan. Keep internal discussion internal: return the decision or result, its evidence, and remaining uncertainty.
