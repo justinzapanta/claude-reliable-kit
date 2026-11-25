@@ -24,6 +24,7 @@ NAV = ROOT / "skills" / "lean-navigation" / "scripts"
 LED = ROOT / "skills" / "task-ledger" / "scripts"
 ENV = {**os.environ, "LEAN_MEMORY_FILE": "", "PYTHONUTF8": "1"}
 ALPHABET = string.printable + "éñ中文✓🐛\u200b\ufeff\x00\x1b[31m"
+TRACE_PREFIXES = ['http://localhost:5173/', 'webpack:///', '/app/', '', 'C:\\\\src\\\\']
 failures = []
 
 
@@ -32,7 +33,7 @@ def rand_text(rng, n=200):
     for _ in range(rng.randint(1, 12)):
         pick = rng.random()
         if pick < 0.25:
-            parts.append(f"  at {rng.choice(['Cart', 'x', ''])} ({rng.choice(['http://localhost:5173/', 'webpack:///', '/app/', '', 'C:\\\\src\\\\'])}"
+            parts.append(f"  at {rng.choice(['Cart', 'x', ''])} ({rng.choice(TRACE_PREFIXES)}"
                          f"{rng.choice(['src/a', 'lib/b', '../c', 'node_modules/x/y', 'd e/f'])}.{rng.choice(['js', 'tsx', 'py', 'go', 'rs', 'map'])}"
                          f"{rng.choice(['', '?t=1'])}:{rng.randint(0, 99999)}:{rng.randint(0, 99)})")
         elif pick < 0.4:
