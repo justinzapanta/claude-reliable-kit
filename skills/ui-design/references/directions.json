@@ -1,0 +1,1130 @@
+{
+ "about": "Curated design directions. A starting point chosen by fit to the product, audience, and feeling; the project's own tokens and brand always win. Every palette is tested for WCAG contrast in light and dark. Fonts are free on Google Fonts. 'study' lists products to learn from, not to copy.",
+ "directions": [
+  {
+   "id": "precise-tool",
+   "name": "Precise tool",
+   "fits": "developer tool devtool saas productivity issue tracker project management ide terminal command palette api platform b2b software startup engineering cli deploy hosting infrastructure",
+   "feel": "precise fast focused technical modern sharp",
+   "mode": "Operate",
+   "fonts": {
+    "display": "Geist",
+    "body": "Geist",
+    "mono": "Geist Mono"
+   },
+   "type_ratio": 1.2,
+   "density": "dense",
+   "radius": "6px",
+   "shadow": "none; 1px borders and subtle surface steps",
+   "motion": "fast 120-180ms, keyboard-first feedback",
+   "imagery": "product UI itself, no stock photos; crisp icons at 16px",
+   "signature": "a keyboard-first command bar and visible shortcuts",
+   "avoid": "gradient blobs, oversized hero illustrations, rounded bubbly cards",
+   "study": "Linear, Raycast, Vercel dashboard",
+   "light": {
+    "bg": "#ffffff",
+    "surface": "#f7f7f8",
+    "text": "#0f1011",
+    "muted": "#5b5e66",
+    "border": "#e6e6e9",
+    "accent": "#0a5cdb",
+    "accent_text": "#ffffff",
+    "danger": "#c62828"
+   },
+   "dark": {
+    "bg": "#0b0c0e",
+    "surface": "#141518",
+    "text": "#f2f3f5",
+    "muted": "#9a9ca5",
+    "border": "#26282d",
+    "accent": "#5c9aff",
+    "accent_text": "#05070a",
+    "danger": "#ff6b6b"
+   },
+   "voices": {
+    "display": "grotesk",
+    "body": "grotesk"
+   }
+  },
+  {
+   "id": "calm-workspace",
+   "name": "Calm workspace",
+   "fits": "notes note taking docs writing journal personal tasks todo knowledge base wiki reading list planner habit second brain",
+   "feel": "calm quiet thoughtful warm focused minimal",
+   "mode": "Operate",
+   "fonts": {
+    "display": "Newsreader",
+    "body": "Public Sans",
+    "mono": "IBM Plex Mono"
+   },
+   "type_ratio": 1.2,
+   "density": "standard",
+   "radius": "8px",
+   "shadow": "very soft, low elevation",
+   "motion": "gentle 200ms fades, nothing bouncy",
+   "imagery": "almost none; let content and type carry it",
+   "signature": "a serif title on a paper-tone page that makes writing feel calm",
+   "avoid": "bright saturated accents, badges everywhere, dense toolbars",
+   "study": "Notion, Things, Bear, iA Writer",
+   "light": {
+    "bg": "#fbfaf7",
+    "surface": "#f3f1ec",
+    "text": "#24211c",
+    "muted": "#645e54",
+    "border": "#e5e1d8",
+    "accent": "#2f5d8a",
+    "accent_text": "#ffffff",
+    "danger": "#b3261e"
+   },
+   "dark": {
+    "bg": "#191816",
+    "surface": "#22211e",
+    "text": "#ece9e2",
+    "muted": "#a29d92",
+    "border": "#34322d",
+    "accent": "#8fb3d9",
+    "accent_text": "#10161c",
+    "danger": "#ef8070"
+   },
+   "voices": {
+    "display": "serif-text",
+    "body": "humanist"
+   }
+  },
+  {
+   "id": "fintech-trust",
+   "name": "Fintech trust",
+   "fits": "bank banking finance fintech payments wallet accounting bookkeeping invoicing payroll budgeting expense tax insurance lending loan investing investment investor stock brokerage money crypto exchange",
+   "feel": "trustworthy secure clear serious precise reassuring",
+   "mode": "Operate",
+   "fonts": {
+    "display": "IBM Plex Sans",
+    "body": "IBM Plex Sans",
+    "mono": "IBM Plex Mono"
+   },
+   "type_ratio": 1.2,
+   "density": "standard",
+   "radius": "8px",
+   "shadow": "subtle, used for cards that hold money",
+   "motion": "minimal; confirm actions clearly, never animate numbers distractingly",
+   "imagery": "clean charts and real UI, no handshake stock photos",
+   "signature": "tabular figures and a calm, exact way of showing amounts and status",
+   "avoid": "playful illustrations, neon, ambiguous red/green without labels",
+   "study": "Stripe dashboard, Mercury, Wise",
+   "light": {
+    "bg": "#ffffff",
+    "surface": "#f5f7fa",
+    "text": "#0b1b2b",
+    "muted": "#4f5b6b",
+    "border": "#dde3ea",
+    "accent": "#0b5cad",
+    "accent_text": "#ffffff",
+    "danger": "#b42318"
+   },
+   "dark": {
+    "bg": "#0a1420",
+    "surface": "#111d2b",
+    "text": "#e8eef5",
+    "muted": "#93a3b5",
+    "border": "#22324a",
+    "accent": "#5aa2f0",
+    "accent_text": "#04111f",
+    "danger": "#f97066"
+   },
+   "voices": {
+    "display": "grotesk",
+    "body": "humanist"
+   }
+  },
+  {
+   "id": "care-clinical",
+   "name": "Care and clinical",
+   "fits": "health healthcare clinic hospital medical patient doctor appointment pharmacy telehealth therapy mental health dental care senior elderly accessibility",
+   "feel": "reassuring clear gentle accessible human trustworthy",
+   "mode": "Operate",
+   "fonts": {
+    "display": "Source Sans 3",
+    "body": "Atkinson Hyperlegible",
+    "mono": "Source Code Pro"
+   },
+   "type_ratio": 1.2,
+   "density": "spacious",
+   "radius": "10px",
+   "shadow": "soft",
+   "motion": "minimal and slow; never flashing",
+   "imagery": "real people and plain diagrams; no gore, no sterile stock",
+   "signature": "very large, readable type and one clear next step per screen",
+   "avoid": "small text, jargon, red for anything that is not a real alarm",
+   "study": "NHS digital service manual, One Medical",
+   "light": {
+    "bg": "#ffffff",
+    "surface": "#f2f7f7",
+    "text": "#102a2b",
+    "muted": "#4a6162",
+    "border": "#d6e4e4",
+    "accent": "#0b6e6e",
+    "accent_text": "#ffffff",
+    "danger": "#b42318"
+   },
+   "dark": {
+    "bg": "#0c1a1b",
+    "surface": "#132627",
+    "text": "#e6f2f2",
+    "muted": "#98b3b3",
+    "border": "#24403f",
+    "accent": "#5cc8c2",
+    "accent_text": "#052322",
+    "danger": "#f97066"
+   },
+   "voices": {
+    "display": "humanist",
+    "body": "humanist"
+   }
+  },
+  {
+   "id": "public-service",
+   "name": "Public service",
+   "fits": "government civic public service council city permit tax filing benefits voting form application registration official utility",
+   "feel": "plain direct trustworthy inclusive no-nonsense",
+   "mode": "Operate",
+   "fonts": {
+    "display": "Public Sans",
+    "body": "Public Sans",
+    "mono": "Source Code Pro"
+   },
+   "type_ratio": 1.25,
+   "density": "spacious",
+   "radius": "0px",
+   "shadow": "none",
+   "motion": "none",
+   "imagery": "none or functional only",
+   "signature": "one question per page and bold, plain headings that anyone understands",
+   "avoid": "decoration, marketing tone, hidden help, tiny links",
+   "study": "GOV.UK Design System, U.S. Web Design System",
+   "light": {
+    "bg": "#ffffff",
+    "surface": "#f3f2f1",
+    "text": "#0b0c0c",
+    "muted": "#505a5f",
+    "border": "#b1b4b6",
+    "accent": "#1d70b8",
+    "accent_text": "#ffffff",
+    "danger": "#c3301a"
+   },
+   "dark": {
+    "bg": "#0b0c0c",
+    "surface": "#1d1f20",
+    "text": "#f3f2f1",
+    "muted": "#b1b4b6",
+    "border": "#505a5f",
+    "accent": "#5694ca",
+    "accent_text": "#0b0c0c",
+    "danger": "#f4775e"
+   },
+   "voices": {
+    "display": "humanist",
+    "body": "humanist"
+   }
+  },
+  {
+   "id": "editorial",
+   "name": "Editorial",
+   "fits": "blog magazine news journalism newsletter publication essay longform article story publisher podcast literature publishing",
+   "feel": "thoughtful literary confident classic intelligent",
+   "mode": "Read",
+   "fonts": {
+    "display": "Fraunces",
+    "body": "Source Serif 4",
+    "mono": "IBM Plex Mono"
+   },
+   "type_ratio": 1.333,
+   "density": "standard",
+   "radius": "2px",
+   "shadow": "none",
+   "motion": "none beyond link and image hover",
+   "imagery": "strong photography or commissioned illustration with captions",
+   "signature": "a dramatic serif headline and a perfect reading column",
+   "avoid": "card grids for articles, tiny body text, sidebars that fight the story",
+   "study": "The Pudding, Stripe Press, The Atlantic",
+   "light": {
+    "bg": "#fffdf8",
+    "surface": "#f6f1e7",
+    "text": "#1a1713",
+    "muted": "#5f5850",
+    "border": "#e4dccd",
+    "accent": "#a4161a",
+    "accent_text": "#ffffff",
+    "danger": "#a4161a"
+   },
+   "dark": {
+    "bg": "#14110e",
+    "surface": "#1e1a16",
+    "text": "#f1ebe1",
+    "muted": "#a89e90",
+    "border": "#362f27",
+    "accent": "#f07167",
+    "accent_text": "#1a0a08",
+    "danger": "#ff8a80"
+   },
+   "voices": {
+    "display": "serif-display",
+    "body": "serif-text"
+   }
+  },
+  {
+   "id": "quiet-luxury",
+   "name": "Quiet luxury",
+   "fits": "luxury fashion jewelry beauty skincare cosmetics perfume boutique hotel architecture interior design atelier premium high end",
+   "feel": "refined elegant restrained confident timeless",
+   "mode": "Persuade",
+   "fonts": {
+    "display": "Cormorant Garamond",
+    "body": "Jost",
+    "mono": "DM Mono"
+   },
+   "type_ratio": 1.5,
+   "density": "spacious",
+   "radius": "0px",
+   "shadow": "none",
+   "motion": "slow 400-600ms fades and image reveals",
+   "imagery": "large, quiet product photography with lots of space",
+   "signature": "huge whitespace and one oversized serif line",
+   "avoid": "badges, discount banners, bright colors, crowded grids",
+   "study": "Aesop, The Row, Aman",
+   "light": {
+    "bg": "#ffffff",
+    "surface": "#f6f5f3",
+    "text": "#111111",
+    "muted": "#5c5c5c",
+    "border": "#e2e0dc",
+    "accent": "#111111",
+    "accent_text": "#ffffff",
+    "danger": "#9b1c1c"
+   },
+   "dark": {
+    "bg": "#0d0d0d",
+    "surface": "#171717",
+    "text": "#f5f3ef",
+    "muted": "#a3a09a",
+    "border": "#2b2a28",
+    "accent": "#f5f3ef",
+    "accent_text": "#0d0d0d",
+    "danger": "#f28b82"
+   },
+   "voices": {
+    "display": "serif-display",
+    "body": "geometric"
+   }
+  },
+  {
+   "id": "playful-consumer",
+   "name": "Playful consumer",
+   "fits": "social app consumer delivery food delivery dating community event tickets party music streaming quiz habit streak fun casual gen z",
+   "feel": "playful friendly energetic warm bold fun",
+   "mode": "Persuade",
+   "fonts": {
+    "display": "Bricolage Grotesque",
+    "body": "Nunito",
+    "mono": "DM Mono"
+   },
+   "type_ratio": 1.333,
+   "density": "standard",
+   "radius": "16px",
+   "shadow": "chunky, slightly offset",
+   "motion": "springy 200-300ms, celebrate success moments",
+   "imagery": "bright illustration or candid photos of real people",
+   "signature": "big rounded shapes and a celebration moment after the main action",
+   "avoid": "corporate blue, thin grey type, stiff stock photos",
+   "study": "Duolingo, Airbnb Experiences, Partiful",
+   "light": {
+    "bg": "#fffdf7",
+    "surface": "#fff3d6",
+    "text": "#1f1a10",
+    "muted": "#5f5643",
+    "border": "#f0e2bd",
+    "accent": "#f25a1d",
+    "accent_text": "#1f1a10",
+    "danger": "#c92a2a"
+   },
+   "dark": {
+    "bg": "#17130b",
+    "surface": "#241d10",
+    "text": "#fff6e0",
+    "muted": "#c2b48f",
+    "border": "#3a301a",
+    "accent": "#ff8f5a",
+    "accent_text": "#1f1a10",
+    "danger": "#ff8787"
+   },
+   "voices": {
+    "display": "grotesk-expressive",
+    "body": "rounded"
+   }
+  },
+  {
+   "id": "storefront",
+   "name": "Clean storefront",
+   "fits": "ecommerce e-commerce shop store retail marketplace product catalog cart checkout apparel shoes furniture homeware dtc brand",
+   "feel": "clean confident product-first simple modern",
+   "mode": "Persuade",
+   "fonts": {
+    "display": "Plus Jakarta Sans",
+    "body": "Plus Jakarta Sans",
+    "mono": "DM Mono"
+   },
+   "type_ratio": 1.25,
+   "density": "standard",
+   "radius": "4px",
+   "shadow": "none; product photos do the work",
+   "motion": "image hover zoom 1.02-1.03, fast cart feedback",
+   "imagery": "consistent product photography on matching backgrounds",
+   "signature": "big, consistent product imagery with price and add-to-cart always obvious",
+   "avoid": "carousels, fake urgency timers, pop-ups on arrival",
+   "study": "Allbirds, Muji, Shopify Dawn theme",
+   "light": {
+    "bg": "#ffffff",
+    "surface": "#f6f6f4",
+    "text": "#121212",
+    "muted": "#5e5e5a",
+    "border": "#e5e5e1",
+    "accent": "#1f3d2b",
+    "accent_text": "#ffffff",
+    "danger": "#b3261e"
+   },
+   "dark": {
+    "bg": "#0f0f0f",
+    "surface": "#1a1a1a",
+    "text": "#f4f4f2",
+    "muted": "#a5a5a0",
+    "border": "#2e2e2c",
+    "accent": "#9fd3b0",
+    "accent_text": "#0f1a13",
+    "danger": "#f28b82"
+   },
+   "voices": {
+    "display": "geometric",
+    "body": "geometric"
+   }
+  },
+  {
+   "id": "warm-hospitality",
+   "name": "Warm hospitality",
+   "fits": "restaurant cafe coffee bakery bar recipe cooking food menu catering winery brewery hotel booking reservation grocery farm",
+   "feel": "warm appetizing inviting crafted local",
+   "mode": "Persuade",
+   "fonts": {
+    "display": "DM Serif Display",
+    "body": "DM Sans",
+    "mono": "DM Mono"
+   },
+   "type_ratio": 1.333,
+   "density": "standard",
+   "radius": "12px",
+   "shadow": "soft and warm",
+   "motion": "unhurried 250-350ms",
+   "imagery": "real, well-lit food and place photography",
+   "signature": "a menu-like typographic layout with real photos of the place",
+   "avoid": "stock food photos, cold blue, cramped menus as PDFs",
+   "study": "Sweetgreen, Resy, Bon Appetit",
+   "light": {
+    "bg": "#fff9f2",
+    "surface": "#fbeedd",
+    "text": "#2b1a10",
+    "muted": "#6e5443",
+    "border": "#efdcc6",
+    "accent": "#a8321a",
+    "accent_text": "#ffffff",
+    "danger": "#8f1d1d"
+   },
+   "dark": {
+    "bg": "#1a110c",
+    "surface": "#261911",
+    "text": "#fbeee0",
+    "muted": "#c4a58f",
+    "border": "#3d2a1e",
+    "accent": "#ff8a65",
+    "accent_text": "#2b1a10",
+    "danger": "#ff8a80"
+   },
+   "voices": {
+    "display": "serif-display",
+    "body": "geometric"
+   }
+  },
+  {
+   "id": "studio-portfolio",
+   "name": "Studio portfolio",
+   "fits": "portfolio agency studio designer photographer artist creative architect personal site resume showcase case study",
+   "feel": "bold expressive confident artistic distinctive",
+   "mode": "Experience",
+   "fonts": {
+    "display": "Instrument Serif",
+    "body": "Instrument Sans",
+    "mono": "DM Mono"
+   },
+   "type_ratio": 1.618,
+   "density": "spacious",
+   "radius": "0px",
+   "shadow": "none",
+   "motion": "one authored moment: a page or image transition",
+   "imagery": "the work itself, very large",
+   "signature": "an unexpected layout or type treatment that shows a point of view",
+   "avoid": "template sections (services, testimonials, CTA) in the usual order",
+   "study": "Pentagram, Awwwards site of the day winners",
+   "light": {
+    "bg": "#f4f1ea",
+    "surface": "#ffffff",
+    "text": "#0e0e0e",
+    "muted": "#55524b",
+    "border": "#d8d3c8",
+    "accent": "#f04a00",
+    "accent_text": "#0e0e0e",
+    "danger": "#b3261e"
+   },
+   "dark": {
+    "bg": "#0e0e0e",
+    "surface": "#1a1a1a",
+    "text": "#f4f1ea",
+    "muted": "#a9a59c",
+    "border": "#2f2e2b",
+    "accent": "#ff6a26",
+    "accent_text": "#0e0e0e",
+    "danger": "#ff8a80"
+   },
+   "voices": {
+    "display": "serif-display",
+    "body": "grotesk"
+   }
+  },
+  {
+   "id": "data-dense",
+   "name": "Data dense",
+   "fits": "dashboard analytics metrics monitoring observability logs admin reporting bi business intelligence charts kpi operations crm inventory logistics shipping shipment parcel tracking carrier dispatch fleet warehouse freight delivery route",
+   "feel": "dense efficient neutral precise scannable",
+   "mode": "Operate",
+   "fonts": {
+    "display": "Hanken Grotesk",
+    "body": "Hanken Grotesk",
+    "mono": "JetBrains Mono"
+   },
+   "type_ratio": 1.125,
+   "density": "dense",
+   "radius": "4px",
+   "shadow": "none",
+   "motion": "none except loading and live-update hints",
+   "imagery": "charts only; a fixed, color-blind-safe chart palette",
+   "signature": "neutral chrome so the data colors are the only color on screen",
+   "avoid": "decorative color, 3D charts, pie charts with many slices",
+   "study": "Grafana, Observable, GitHub insights",
+   "light": {
+    "bg": "#ffffff",
+    "surface": "#f6f7f9",
+    "text": "#101418",
+    "muted": "#56606b",
+    "border": "#e1e5ea",
+    "accent": "#0f62fe",
+    "accent_text": "#ffffff",
+    "danger": "#da1e28"
+   },
+   "dark": {
+    "bg": "#0d1117",
+    "surface": "#161b22",
+    "text": "#e6edf3",
+    "muted": "#8d96a0",
+    "border": "#30363d",
+    "accent": "#4493f8",
+    "accent_text": "#0d1117",
+    "danger": "#f85149"
+   },
+   "voices": {
+    "display": "grotesk",
+    "body": "grotesk"
+   }
+  },
+  {
+   "id": "learning",
+   "name": "Learning",
+   "fits": "education learning course school students teacher tutoring lms quiz exam language learning edtech university study flashcards",
+   "feel": "encouraging clear friendly structured motivating",
+   "mode": "Operate",
+   "fonts": {
+    "display": "Lexend",
+    "body": "Lexend",
+    "mono": "JetBrains Mono"
+   },
+   "type_ratio": 1.25,
+   "density": "spacious",
+   "radius": "12px",
+   "shadow": "soft",
+   "motion": "positive feedback on progress, 200-300ms",
+   "imagery": "friendly diagrams and simple illustration",
+   "signature": "visible progress and one learning step at a time",
+   "avoid": "walls of text, punishing red, cluttered navigation",
+   "study": "Khan Academy, Brilliant",
+   "light": {
+    "bg": "#ffffff",
+    "surface": "#f4f7ff",
+    "text": "#14213d",
+    "muted": "#4b5875",
+    "border": "#dfe6f5",
+    "accent": "#1f6feb",
+    "accent_text": "#ffffff",
+    "danger": "#b3261e"
+   },
+   "dark": {
+    "bg": "#0e1525",
+    "surface": "#16203a",
+    "text": "#eef2fb",
+    "muted": "#a1aecb",
+    "border": "#283656",
+    "accent": "#79a7ff",
+    "accent_text": "#0e1525",
+    "danger": "#ff7b72"
+   },
+   "voices": {
+    "display": "geometric",
+    "body": "geometric"
+   }
+  },
+  {
+   "id": "conversational",
+   "name": "Conversational",
+   "fits": "ai assistant chatbot chat copilot llm agent writing assistant support bot messaging prompt generator",
+   "feel": "calm intelligent warm text-first human",
+   "mode": "Operate",
+   "fonts": {
+    "display": "Literata",
+    "body": "Figtree",
+    "mono": "JetBrains Mono"
+   },
+   "type_ratio": 1.2,
+   "density": "standard",
+   "radius": "12px",
+   "shadow": "very soft",
+   "motion": "streaming text and subtle typing state; nothing flashy",
+   "imagery": "none; the conversation is the product",
+   "signature": "a comfortable reading width and a composer that feels like writing",
+   "avoid": "purple gradients, sparkle icons everywhere, robot mascots",
+   "study": "iA Writer, Perplexity, Arc search",
+   "light": {
+    "bg": "#faf9f6",
+    "surface": "#f1efe9",
+    "text": "#1b1a18",
+    "muted": "#5f5c55",
+    "border": "#e2dfd6",
+    "accent": "#1f6f5c",
+    "accent_text": "#ffffff",
+    "danger": "#b3261e"
+   },
+   "dark": {
+    "bg": "#161614",
+    "surface": "#1f1f1c",
+    "text": "#eeece6",
+    "muted": "#a6a299",
+    "border": "#33322d",
+    "accent": "#6cc5a8",
+    "accent_text": "#0f1f1a",
+    "danger": "#f28b82"
+   },
+   "voices": {
+    "display": "serif-text",
+    "body": "humanist"
+   }
+  },
+  {
+   "id": "developer-docs",
+   "name": "Developer docs",
+   "fits": "documentation docs api reference sdk developer portal guide tutorial changelog open source library framework readme",
+   "feel": "clear structured technical helpful scannable",
+   "mode": "Read",
+   "fonts": {
+    "display": "Schibsted Grotesk",
+    "body": "Schibsted Grotesk",
+    "mono": "JetBrains Mono"
+   },
+   "type_ratio": 1.2,
+   "density": "standard",
+   "radius": "6px",
+   "shadow": "none",
+   "motion": "none",
+   "imagery": "code samples and simple diagrams",
+   "signature": "excellent code blocks with copy buttons and a sticky table of contents",
+   "avoid": "marketing hero on docs pages, hidden search, low-contrast code themes",
+   "study": "Stripe docs, Tailwind CSS docs, MDN",
+   "light": {
+    "bg": "#ffffff",
+    "surface": "#f6f8fa",
+    "text": "#1f2328",
+    "muted": "#59636e",
+    "border": "#d1d9e0",
+    "accent": "#0969da",
+    "accent_text": "#ffffff",
+    "danger": "#d1242f"
+   },
+   "dark": {
+    "bg": "#101214",
+    "surface": "#181b1f",
+    "text": "#e8eaed",
+    "muted": "#9aa0a6",
+    "border": "#2d3136",
+    "accent": "#6ab0ff",
+    "accent_text": "#0b1220",
+    "danger": "#ff7b72"
+   },
+   "voices": {
+    "display": "grotesk",
+    "body": "grotesk"
+   }
+  },
+  {
+   "id": "enterprise",
+   "name": "Enterprise suite",
+   "fits": "enterprise erp crm hr human resources admin console internal tool back office procurement compliance workflow approvals ticketing helpdesk",
+   "feel": "dependable efficient conservative structured calm",
+   "mode": "Operate",
+   "fonts": {
+    "display": "Source Sans 3",
+    "body": "Source Sans 3",
+    "mono": "Source Code Pro"
+   },
+   "type_ratio": 1.2,
+   "density": "dense",
+   "radius": "4px",
+   "shadow": "subtle",
+   "motion": "minimal",
+   "imagery": "icons only",
+   "signature": "strong tables, filters, and bulk actions that save hours",
+   "avoid": "consumer flourishes, hidden actions, modals inside modals",
+   "study": "Atlassian Design System, IBM Carbon",
+   "light": {
+    "bg": "#f7f8fa",
+    "surface": "#ffffff",
+    "text": "#172b4d",
+    "muted": "#44546f",
+    "border": "#dcdfe4",
+    "accent": "#0c66e4",
+    "accent_text": "#ffffff",
+    "danger": "#c9372c"
+   },
+   "dark": {
+    "bg": "#1d2125",
+    "surface": "#22272b",
+    "text": "#dee4ea",
+    "muted": "#9fadbc",
+    "border": "#384047",
+    "accent": "#579dff",
+    "accent_text": "#1d2125",
+    "danger": "#f87168"
+   },
+   "voices": {
+    "display": "humanist",
+    "body": "humanist"
+   }
+  },
+  {
+   "id": "natural",
+   "name": "Natural",
+   "fits": "outdoor nature sustainability climate environment garden plants farming agriculture eco energy solar hiking camping conservation",
+   "feel": "grounded honest natural calm earthy",
+   "mode": "Persuade",
+   "fonts": {
+    "display": "Young Serif",
+    "body": "Work Sans",
+    "mono": "DM Mono"
+   },
+   "type_ratio": 1.25,
+   "density": "spacious",
+   "radius": "8px",
+   "shadow": "soft",
+   "motion": "slow and calm",
+   "imagery": "real landscapes and people outdoors; maps",
+   "signature": "earthy palette and honest numbers about impact",
+   "avoid": "neon green, greenwashing stock leaves, vague claims",
+   "study": "Patagonia, Ecosia",
+   "light": {
+    "bg": "#f7f6f0",
+    "surface": "#ecebe1",
+    "text": "#1c2418",
+    "muted": "#545e4c",
+    "border": "#d9d8c9",
+    "accent": "#2f5d3a",
+    "accent_text": "#ffffff",
+    "danger": "#a8321e"
+   },
+   "dark": {
+    "bg": "#121610",
+    "surface": "#1b2118",
+    "text": "#eceee4",
+    "muted": "#a3ab96",
+    "border": "#2f382a",
+    "accent": "#8fc79a",
+    "accent_text": "#0f1a10",
+    "danger": "#f28b6b"
+   },
+   "voices": {
+    "display": "serif-display",
+    "body": "humanist"
+   }
+  },
+  {
+   "id": "travel-stay",
+   "name": "Travel and stay",
+   "fits": "travel booking book hotel vacation rental real estate property listing apartment airline trip tour destination map traveller tourist surf surfing diving ski resort camp",
+   "feel": "inviting aspirational warm open trustworthy",
+   "mode": "Persuade",
+   "fonts": {
+    "display": "Playfair Display",
+    "body": "Manrope",
+    "mono": "DM Mono"
+   },
+   "type_ratio": 1.333,
+   "density": "standard",
+   "radius": "12px",
+   "shadow": "soft",
+   "motion": "smooth 250-300ms image transitions",
+   "imagery": "large place photography and maps",
+   "signature": "photo-led listings with price, dates, and location always clear",
+   "avoid": "hidden fees, tiny photos, cluttered filters",
+   "study": "Airbnb, Aman, Booking.com search",
+   "light": {
+    "bg": "#ffffff",
+    "surface": "#f7f5f2",
+    "text": "#1d1b19",
+    "muted": "#5f5a54",
+    "border": "#e7e2db",
+    "accent": "#b93c0b",
+    "accent_text": "#ffffff",
+    "danger": "#9f1d1d"
+   },
+   "dark": {
+    "bg": "#141210",
+    "surface": "#1e1b18",
+    "text": "#f3efe9",
+    "muted": "#aba398",
+    "border": "#35302a",
+    "accent": "#fb923c",
+    "accent_text": "#1d1b19",
+    "danger": "#f28b82"
+   },
+   "voices": {
+    "display": "serif-display",
+    "body": "geometric"
+   }
+  },
+  {
+   "id": "hardware-tech",
+   "name": "Hardware and tech",
+   "fits": "hardware device gadget electronics robotics iot audio synth camera drone space aerospace engineering lab deep tech",
+   "feel": "technical bold precise industrial futuristic",
+   "mode": "Persuade",
+   "fonts": {
+    "display": "Space Grotesk",
+    "body": "Space Grotesk",
+    "mono": "Space Mono"
+   },
+   "type_ratio": 1.333,
+   "density": "standard",
+   "radius": "2px",
+   "shadow": "none; visible grid lines",
+   "motion": "precise, mechanical 150-250ms",
+   "imagery": "product renders and technical drawings",
+   "signature": "a spec-sheet grid with monospaced labels and one signal color",
+   "avoid": "soft pastels, rounded blobs, generic 'futuristic' purple glow",
+   "study": "Teenage Engineering, Nothing, SpaceX",
+   "light": {
+    "bg": "#ededea",
+    "surface": "#f8f8f6",
+    "text": "#111111",
+    "muted": "#55554f",
+    "border": "#cfcfc9",
+    "accent": "#ff3b00",
+    "accent_text": "#111111",
+    "danger": "#b3261e"
+   },
+   "dark": {
+    "bg": "#0a0a0a",
+    "surface": "#151515",
+    "text": "#ededea",
+    "muted": "#9e9e97",
+    "border": "#2a2a28",
+    "accent": "#ff5a1f",
+    "accent_text": "#0a0a0a",
+    "danger": "#ff8a80"
+   },
+   "voices": {
+    "display": "grotesk",
+    "body": "grotesk"
+   }
+  },
+  {
+   "id": "community-cause",
+   "name": "Community cause",
+   "fits": "nonprofit charity donation volunteer ngo foundation church community organization fundraising campaign advocacy",
+   "feel": "human hopeful warm honest inclusive",
+   "mode": "Persuade",
+   "fonts": {
+    "display": "Libre Franklin",
+    "body": "Lora",
+    "mono": "DM Mono"
+   },
+   "type_ratio": 1.25,
+   "density": "standard",
+   "radius": "8px",
+   "shadow": "soft",
+   "motion": "calm",
+   "imagery": "real people from the community, with consent and dignity",
+   "signature": "a real story up front and one clear way to help",
+   "avoid": "pity imagery, many competing calls to action",
+   "study": "charity: water, Wikimedia",
+   "light": {
+    "bg": "#ffffff",
+    "surface": "#fdf6ec",
+    "text": "#1e1b16",
+    "muted": "#5d564b",
+    "border": "#ece3d4",
+    "accent": "#0e6ba8",
+    "accent_text": "#ffffff",
+    "danger": "#b3261e"
+   },
+   "dark": {
+    "bg": "#15130f",
+    "surface": "#1f1c17",
+    "text": "#f6efe4",
+    "muted": "#b0a695",
+    "border": "#37322a",
+    "accent": "#6cb4e4",
+    "accent_text": "#0b1a26",
+    "danger": "#f28b82"
+   },
+   "voices": {
+    "display": "humanist",
+    "body": "serif-text"
+   }
+  },
+  {
+   "id": "professional-services",
+   "name": "Professional services",
+   "fits": "law legal firm lawyer consulting accounting firm advisory architecture firm b2b services recruiting agency corporate",
+   "feel": "authoritative composed trustworthy classic expert",
+   "mode": "Persuade",
+   "fonts": {
+    "display": "Spectral",
+    "body": "Albert Sans",
+    "mono": "DM Mono"
+   },
+   "type_ratio": 1.25,
+   "density": "standard",
+   "radius": "2px",
+   "shadow": "none",
+   "motion": "minimal",
+   "imagery": "real team photos and plain facts, no gavels or handshakes",
+   "signature": "confident serif headings and specific proof (cases, outcomes)",
+   "avoid": "stock photos of suits, vague 'solutions' language",
+   "study": "Stripe Atlas pages, McKinsey insights",
+   "light": {
+    "bg": "#ffffff",
+    "surface": "#f7f6f3",
+    "text": "#1a1d24",
+    "muted": "#545966",
+    "border": "#e1e0db",
+    "accent": "#6b1d2a",
+    "accent_text": "#ffffff",
+    "danger": "#a61b1b"
+   },
+   "dark": {
+    "bg": "#121318",
+    "surface": "#1b1d24",
+    "text": "#ecebe7",
+    "muted": "#a3a5ad",
+    "border": "#30333c",
+    "accent": "#e8a0ab",
+    "accent_text": "#1a0b0e",
+    "danger": "#f28b82"
+   },
+   "voices": {
+    "display": "serif-text",
+    "body": "humanist"
+   }
+  },
+  {
+   "id": "game-night",
+   "name": "Game night",
+   "fits": "game gaming esports streaming entertainment movie film anime comics music festival nightlife fan tournament",
+   "feel": "energetic bold immersive vivid loud",
+   "mode": "Experience",
+   "fonts": {
+    "display": "Big Shoulders Display",
+    "body": "Rubik",
+    "mono": "DM Mono"
+   },
+   "type_ratio": 1.5,
+   "density": "standard",
+   "radius": "4px",
+   "shadow": "glow allowed on the accent only",
+   "motion": "can lead: 300ms transitions, hover energy, reduced-motion fallback",
+   "imagery": "key art and characters, full bleed",
+   "signature": "dark, full-bleed key art with a condensed display face",
+   "avoid": "corporate layouts, small imagery, too many neon colors at once",
+   "study": "Riot Games, Nintendo, A24",
+   "light": {
+    "bg": "#f5f6fa",
+    "surface": "#ffffff",
+    "text": "#0c0d12",
+    "muted": "#50546a",
+    "border": "#dcdfea",
+    "accent": "#d10f59",
+    "accent_text": "#ffffff",
+    "danger": "#b3261e"
+   },
+   "dark": {
+    "bg": "#07080c",
+    "surface": "#11131b",
+    "text": "#f1f2f8",
+    "muted": "#9599b0",
+    "border": "#23263a",
+    "accent": "#ff3d7f",
+    "accent_text": "#07080c",
+    "danger": "#ff6b6b"
+   },
+   "voices": {
+    "display": "condensed",
+    "body": "rounded"
+   }
+  },
+  {
+   "id": "kids-family",
+   "name": "Kids and family",
+   "fits": "kids children family parents baby toys preschool games for kids story stories picture books reading app school parents childcare",
+   "feel": "cheerful safe simple friendly bright",
+   "mode": "Experience",
+   "fonts": {
+    "display": "Baloo 2",
+    "body": "Nunito",
+    "mono": "DM Mono"
+   },
+   "type_ratio": 1.333,
+   "density": "spacious",
+   "radius": "20px",
+   "shadow": "soft, chunky",
+   "motion": "bouncy but short; sounds optional",
+   "imagery": "friendly characters and big icons",
+   "signature": "huge touch targets and characters that guide each step",
+   "avoid": "small text, dark patterns, ads, anything that collects data from children",
+   "study": "PBS Kids, Toca Boca",
+   "light": {
+    "bg": "#fffaf0",
+    "surface": "#fff0c9",
+    "text": "#1d2440",
+    "muted": "#4d5578",
+    "border": "#f3dfa8",
+    "accent": "#2667ff",
+    "accent_text": "#ffffff",
+    "danger": "#c92a2a"
+   },
+   "dark": {
+    "bg": "#151a30",
+    "surface": "#1e2546",
+    "text": "#fff7e6",
+    "muted": "#b6bddb",
+    "border": "#2f3866",
+    "accent": "#8fb0ff",
+    "accent_text": "#151a30",
+    "danger": "#ff8787"
+   },
+   "voices": {
+    "display": "rounded",
+    "body": "rounded"
+   }
+  },
+  {
+   "id": "neo-brutal",
+   "name": "Neo-brutal indie",
+   "fits": "indie maker creator newsletter zine side project tool for creators digital products gumroad link in bio hackathon art collective",
+   "feel": "raw honest bold quirky loud",
+   "mode": "Persuade",
+   "fonts": {
+    "display": "Archivo Black",
+    "body": "Archivo",
+    "mono": "DM Mono"
+   },
+   "type_ratio": 1.333,
+   "density": "standard",
+   "radius": "0px",
+   "shadow": "hard offset, solid black",
+   "motion": "snappy 100ms press offsets",
+   "imagery": "flat color blocks and stickers",
+   "signature": "thick black borders and hard shadows on a bright surface",
+   "avoid": "soft gradients and glass, mixing with corporate polish",
+   "study": "Gumroad, Are.na",
+   "light": {
+    "bg": "#fffef5",
+    "surface": "#ffe94d",
+    "text": "#000000",
+    "muted": "#4a4a40",
+    "border": "#000000",
+    "accent": "#000000",
+    "accent_text": "#fffef5",
+    "danger": "#c1121f"
+   },
+   "dark": {
+    "bg": "#000000",
+    "surface": "#1a1a1a",
+    "text": "#fffef5",
+    "muted": "#b5b5a8",
+    "border": "#fffef5",
+    "accent": "#ffe94d",
+    "accent_text": "#000000",
+    "danger": "#ff6b6b"
+   },
+   "voices": {
+    "display": "condensed",
+    "body": "grotesk"
+   }
+  },
+  {
+   "id": "wellness",
+   "name": "Wellness",
+   "fits": "wellness meditation yoga fitness sleep mindfulness spa self care nutrition coaching mental wellbeing journaling breathing",
+   "feel": "soothing gentle warm balanced restorative",
+   "mode": "Experience",
+   "fonts": {
+    "display": "Outfit",
+    "body": "Outfit",
+    "mono": "DM Mono"
+   },
+   "type_ratio": 1.25,
+   "density": "spacious",
+   "radius": "24px",
+   "shadow": "very soft",
+   "motion": "slow breathing rhythms 400-800ms, always with reduced-motion fallback",
+   "imagery": "soft natural photography, warm light",
+   "signature": "rounded calm surfaces and a single slow animated moment",
+   "avoid": "aggressive streaks, red alerts, crowded stats",
+   "study": "Calm, Headspace, Oura",
+   "light": {
+    "bg": "#fbf8f4",
+    "surface": "#f3ece4",
+    "text": "#2a2420",
+    "muted": "#665b53",
+    "border": "#e6ddd3",
+    "accent": "#4f6f5a",
+    "accent_text": "#ffffff",
+    "danger": "#a8321e"
+   },
+   "dark": {
+    "bg": "#171412",
+    "surface": "#221e1b",
+    "text": "#f3ede6",
+    "muted": "#ada196",
+    "border": "#38312c",
+    "accent": "#9dc0a8",
+    "accent_text": "#142019",
+    "danger": "#f28b6b"
+   },
+   "voices": {
+    "display": "geometric",
+    "body": "geometric"
+   }
+  }
+ ]
+}

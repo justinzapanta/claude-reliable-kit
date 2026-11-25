@@ -1,0 +1,158 @@
+{
+  "about": "Component decisions a design engineer makes: which component fits the job, why, when the alternative wins, and what to avoid. 'n' is the number of options or items when the question has one. Read by design.py choose.",
+  "rules": [
+    {
+      "id": "choose-one",
+      "need": "pick one option from a set",
+      "words": "choose pick select one single option options either radio dropdown plan shipping method type size country language category role status",
+      "bands": [
+        {"max": 2, "use": "switch (if it turns something on or off and applies at once) or a 2-option radio / segmented control", "why": "both choices stay visible; one tap"},
+        {"max": 5, "use": "radio group (segmented control if labels are 1-2 words and it switches a view)", "why": "every option is visible and comparable without opening anything"},
+        {"max": 15, "use": "select (native dropdown)", "why": "too many to show at once but short enough to scan in a list"},
+        {"max": 100000, "use": "combobox with type-to-search (autocomplete)", "why": "nobody scrolls 15+ items; typing narrows it fast"}
+      ],
+      "instead": "Options that need description or comparison (plans, shipping speeds): radio cards. Choice affects only a view: segmented control or tabs.",
+      "avoid": "a dropdown for 2-4 options; a radio list of 30 countries; a select with no default when one is clearly most common"
+    },
+    {
+      "id": "choose-many",
+      "need": "pick several options",
+      "words": "multiple many several multi select tags interests filters permissions checkboxes features toppings categories",
+      "bands": [
+        {"max": 7, "use": "checkbox list", "why": "everything visible; checkboxes say 'any number' clearly"},
+        {"max": 100000, "use": "multi-select combobox with removable chips", "why": "searchable, and the chosen ones stay visible"}
+      ],
+      "instead": "Filters on a results page: checkbox groups in a filter panel with counts. Assigning items to two lists: a transfer list.",
+      "avoid": "a multi-select native <select> (hard on every device); switches for options that only apply after a Save button"
+    },
+    {
+      "id": "on-off",
+      "need": "turn a setting on or off",
+      "words": "toggle switch enable disable on off setting preference notification notifications dark mode",
+      "use": "switch when the change applies immediately; checkbox when it applies after Save or is part of a form",
+      "why": "a switch promises instant effect; a checkbox promises 'part of what you submit'",
+      "instead": "Two named states that are not on/off (monthly / yearly): segmented control.",
+      "avoid": "a switch inside a form that needs Save; a checkbox that silently applies at once"
+    },
+    {
+      "id": "confirm-destructive",
+      "need": "delete or do something hard to undo",
+      "words": "delete remove destroy cancel subscription close account archive discard reset irreversible destructive confirm",
+      "use": "reversible: do it and offer Undo in a toast; irreversible: a confirmation dialog that names what is lost, with a red button that says the action ('Delete project')",
+      "why": "confirmations people click through by habit protect nothing; undo protects without slowing everyone down",
+      "instead": "Very high stakes (deleting an organization): require typing the name.",
+      "avoid": "'Are you sure?' with OK/Cancel; confirming reversible actions; the destructive button focused by default"
+    },
+    {
+      "id": "feedback",
+      "need": "tell the user the result of something",
+      "words": "message feedback success error saved saving save after submit submitted sent done confirmation notify notification alert toast banner warning status result outcome",
+      "use": "inline message next to the thing (form errors, field validation); toast for the result of a user action that is done (Saved, with Undo); banner for a state of the whole page or account (offline, trial ending)",
+      "why": "feedback belongs where the eyes already are; toasts disappear, so never put something the user must act on in one",
+      "instead": "Blocking problem that stops the task: inline error plus focus on it, not a modal.",
+      "avoid": "toasts for errors that need action; modals for success; color as the only signal"
+    },
+    {
+      "id": "show-records",
+      "need": "show a collection of items",
+      "words": "records items list table grid cards rows products orders users invoices results collection catalog gallery feed",
+      "use": "table when people compare values across items or sort by columns; list when they scan one main attribute and open items; cards when items are visual (photos, products) or have very different content",
+      "why": "the layout should match the task: comparing needs columns, browsing needs images, scanning needs a list",
+      "instead": "On phones, a table of more than 3 columns becomes stacked cards or a list with the key values.",
+      "avoid": "cards for data people need to compare; tables for photo-heavy items; identical cards with no scannable anchor"
+    },
+    {
+      "id": "many-items",
+      "need": "show a long set of items",
+      "words": "pagination paginate infinite scroll load more long list hundreds thousands many results page",
+      "use": "pagination for work data people return to or reference (tables, search results); 'load more' button for browsing; infinite scroll only for endless feeds with no footer",
+      "why": "pagination keeps position and URLs; infinite scroll loses both and hides the footer",
+      "instead": "Very long lists that must stay on one page: virtualize the list.",
+      "avoid": "infinite scroll on tables or search results; pagination with no total count"
+    },
+    {
+      "id": "switch-views",
+      "need": "move between sections or views",
+      "words": "tabs sections views navigate switch between pages sidebar menu steps wizard sequence navigation",
+      "bands": [
+        {"max": 1, "use": "no navigation: just the content", "why": "a single tab is noise"},
+        {"max": 5, "use": "tabs (peer views of the same thing)", "why": "all views visible; one click to switch; no page change"},
+        {"max": 100000, "use": "sidebar or top navigation (or a select on phones)", "why": "more than 5 tabs wrap or scroll and hide options"}
+      ],
+      "instead": "Steps that must happen in order: a stepper or wizard with back and progress. Sections the user reads in order: one page with headings and an on-page outline.",
+      "avoid": "tabs for sequential steps; tabs whose content depends on another tab; hamburger menus on desktop"
+    },
+    {
+      "id": "more-detail",
+      "need": "show more detail or a secondary task",
+      "words": "details more info expand collapse preview edit popup modal dialog drawer side panel accordion disclosure overlay inspector quick view",
+      "use": "disclosure or accordion for optional detail on the same page; drawer (side panel) for a task that needs the page as context (edit a row, preview); modal dialog only for a short task that must interrupt; its own page for anything long, linkable, or multi-step",
+      "why": "modals block context and are hard on phones; pages can be linked, refreshed, and navigated back from",
+      "instead": "Peek on hover is only an extra; the same detail must be reachable by click or keyboard.",
+      "avoid": "long forms in modals; modals that open modals; essential content hidden in a collapsed accordion"
+    },
+    {
+      "id": "enter-date",
+      "need": "enter a date or time",
+      "words": "date birthday dob time schedule booking appointment calendar range deadline due reservation check-in",
+      "use": "known dates far away (birthday, expiry): text fields or a typed date with a clear format; near-future scheduling: calendar picker showing availability; ranges (stays, reports): range picker with presets",
+      "why": "scrolling a calendar to 1987 is slow; picking next Tuesday from a calendar is fast",
+      "instead": "Times: a list of available slots beats a free time input for bookings.",
+      "avoid": "calendar-only entry with no typing; ambiguous formats like 03/04; a picker that hides the time zone"
+    },
+    {
+      "id": "enter-number",
+      "need": "enter a number or quantity",
+      "words": "number quantity amount count price budget range slider stepper percentage volume rating",
+      "use": "stepper (minus / input / plus) for small counts (quantity 1-10); slider with a visible value for approximate choices on a range (volume, budget estimate); text input with inputmode=decimal for exact values (prices, amounts)",
+      "why": "sliders are imprecise and hard for keyboards and tremors; steppers suit small changes",
+      "instead": "Ratings: 5 labelled radio buttons styled as stars.",
+      "avoid": "a slider for exact amounts; type=number for codes, card numbers, or phone numbers"
+    },
+    {
+      "id": "loading",
+      "need": "show that something is loading or running",
+      "words": "loading spinner progress skeleton waiting upload processing fetching pending busy",
+      "use": "under 1s: nothing; 1-3s: a spinner or pressed state where the action happened; content loads: skeletons shaped like the result; known duration or over 10s: a progress bar with what is happening, and let the user leave and get notified",
+      "why": "feedback should match the wait; skeletons prevent layout jumps",
+      "instead": "Optimistic updates for actions that almost always succeed (like, rename).",
+      "avoid": "full-page spinners for one widget; buttons that change width when loading; spinners with no end"
+    },
+    {
+      "id": "help-text",
+      "need": "explain something to the user",
+      "words": "help hint tooltip explain info description guidance instructions label onboarding tip",
+      "use": "visible hint text under the field or heading for anything the user needs; tooltip only to name an icon-only control or add non-essential detail",
+      "why": "tooltips are invisible on touch and easy to miss; needed information must be on the page",
+      "instead": "Complex concepts: a 'Learn more' link to a help page, or an inline expandable explanation.",
+      "avoid": "essential instructions in tooltips or placeholders; info icons on every field"
+    },
+    {
+      "id": "primary-action",
+      "need": "place the main actions of a page or form",
+      "words": "button buttons action actions cta call to action submit save primary secondary",
+      "use": "one primary button per view, named with verb and object ('Save changes'); secondary actions as quieter buttons; destructive actions separated",
+      "why": "two primary buttons means no primary action",
+      "instead": "Many actions on one item: a menu ('...') with the most common one left out as a button.",
+      "avoid": "several primary buttons; disabled submit buttons with no explanation; 'OK' / 'Submit' labels"
+    },
+    {
+      "id": "search-or-filter",
+      "need": "help users find items",
+      "words": "search find filter filters sort browse lookup query facets narrow",
+      "use": "search box when users know what they want (a name, an ID); filters when they explore by attributes (price, size, status); both on large catalogs, with search first",
+      "why": "search serves known items, filters serve exploration",
+      "instead": "Under ~20 items: no search, just a sorted list.",
+      "avoid": "filters that reset when you search; search without showing the query and result count"
+    },
+    {
+      "id": "media-showcase",
+      "need": "show several featured items, images, or messages",
+      "words": "carousel slider slideshow hero rotating banner gallery featured testimonials images",
+      "use": "a static grid or a horizontally scrollable row with visible overflow (the next item peeks); one hero, not a rotating set",
+      "why": "auto-rotating carousels hide content, get few clicks after slide one, and are hard to control",
+      "instead": "A photo gallery: a grid that opens a lightbox with keyboard and swipe support.",
+      "avoid": "auto-advancing slides; dots as the only control; key information on slide 3"
+    }
+  ]
+}
