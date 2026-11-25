@@ -1,6 +1,6 @@
 ---
 name: debug-scientifically
-description: Root-cause debugging. Use when a failure's cause is unclear: failing test, crash, or wrong output, or an earlier fix failed. For a pasted browser error, lean-navigation goes first.
+description: Root-cause debugging. Use when a failure's cause is unclear after a failing test, crash, or wrong output, or an earlier fix failed. For a pasted browser error, lean-navigation goes first.
 ---
 
 # Debug Scientifically

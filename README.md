@@ -18,12 +18,14 @@ python path/to/claude-reliable-kit/install.py --uninstall      # remove skills, 
 
 | Flag | What it does |
 |---|---|
-| (none) | Copies the 10 skills; removes the 3 skills merged into `engineering-principles` if an older kit is installed |
+| (none) | Copies the 10 skills; removes the 3 skills merged into `engineering-principles` if they carry the installer ownership marker |
 | `--claude-md` | Adds the rules from [templates/CLAUDE.md](templates/CLAUDE.md) to your `CLAUDE.md` in a marked block. **Recommended:** skills load only when Claude decides they fit, and for a one-line edit it usually decides they don't. In our benchmark, project memory stopped a change that broke a recorded legal decision in 3/3 runs with these rules and 0/3 without them |
 | `--hook` | Registers a Claude Code hook: the first time Claude edits a file with recorded decisions, the edit pauses once and shows them. Works even when no skill loads. Backs up `settings.json` first |
 | `--seed` | Fills project memory from fix commits and warning comments (`NOTE:`, `WARNING:`, `DO NOT`) so it is useful on day one |
 | `--lean-replies` | Adds optional rules for shorter answers; output tokens cost the most |
 | `--all` | `--claude-md --hook --seed` |
+
+Unmarked skill folders (including manual installs) are preserved. If one conflicts, back it up and move it aside before upgrading. Use `--force` only to deliberately replace a conflicting active skill.
 
 **By hand:** copy the contents of `skills/` into `~/.claude/skills/` (or `.claude/skills/` in a project) and paste [templates/CLAUDE.md](templates/CLAUDE.md) into your `CLAUDE.md`. Then open Claude Code and try:
 
@@ -99,7 +101,7 @@ python skills/lean-navigation/scripts/squeeze.py -- python -m pytest -q
 python skills/lean-navigation/scripts/squeeze.py -- git status
 ```
 
-On a 310-test run that printed 537,913 characters, output was 1,680 characters (-99.7%) with the failing assertion, traceback, and summary intact. `squeeze.py --gain` shows the running total saved in the current repository, with a token estimate.
+On a 310-test run that printed 537,913 characters, output was 1,680 characters (-99.7%) with the failing assertion, traceback, and summary intact. `squeeze.py --gain` compares raw output with the entire printed reply, including its footer. Short commands can cost extra characters. New totals start fresh after this accounting change. Token counts are estimates.
 
 ### Project memory graph
 

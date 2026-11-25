@@ -1,6 +1,6 @@
 ---
 name: review-changes
-description: Reviews a diff, PR, branch, or commit for real defects: correctness, regressions, security, missed requirements. Use when asked to review or before a release.
+description: Reviews a diff, PR, branch, or commit for correctness defects, regressions, security issues, or missed requirements. Use when asked to review or before a release.
 ---
 
 # Review Changes

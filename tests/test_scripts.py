@@ -607,6 +607,14 @@ class SeedHookGainTests(TempProject):
         self.assertEqual(proc.returncode, 0)
         self.assertEqual(proc.stdout.strip(), "")
 
+    def test_gain_counts_footer_on_short_output(self):
+        git(self.tmp, "init", "-q")
+        proc = run(NAV / "squeeze.py", "--", sys.executable, "-c", "print('x')", cwd=self.tmp)
+        self.assertEqual(proc.returncode, 0)
+        stats = json.loads((self.tmp / ".git/lean-squeeze-stats-v2.json").read_text())
+        self.assertEqual(stats["compact_chars"], len(proc.stdout))
+        self.assertGreater(stats["compact_chars"], stats["raw_chars"])
+
     def test_squeeze_gain(self):
         script = write(self.tmp, "noise.py", "for i in range(500): print(f'[INFO] worker {i} ok')\nprint('1 failed')\nraise SystemExit(1)\n")
         run(NAV / "squeeze.py", "--", sys.executable, script, cwd=self.tmp)
@@ -655,6 +663,14 @@ class InstallerTests(TempProject):
         self.assertNotIn("hooks", settings)
         self.assertFalse((self.home / ".claude" / "skills" / "lean-navigation").exists())
 
+    def test_seed_error_reports_partial_install(self):
+        git(self.proj, "init", "-q")
+        result = run(ROOT / "install.py", "--project", self.proj, "--seed",
+                     env={"LEAN_MEMORY_FILE": str(self.proj / "CLAUDE.md" / "memory.json")})
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("Skills installed, but memory seeding failed", result.stderr)
+        self.assertTrue((self.proj / ".claude/skills/task-ledger/SKILL.md").exists())
+
     def test_project_scope_uses_project_paths(self):
         out = run(ROOT / "install.py", "--project", self.proj, "--claude-md", "--hook", "--home", self.home).stdout
         self.assertIn("install skill", out)
@@ -689,9 +705,11 @@ class HardeningTests(TempProject):
 
     def test_uninstall_keeps_other_hooks_in_same_group(self):
         settings = self.tmp / "home" / ".claude" / "settings.json"
-        mine = {"type": "command", "command": "my-formatter-guard.sh"}
+        mine = {"type": "command", "command": "python /other-tool/memory_hook.py"}
+        self.assertEqual(self.installer("--hook").returncode, 0)
+        own = json.loads(settings.read_text(encoding="utf-8"))["hooks"]["PreToolUse"][0]["hooks"][0]
         settings.write_text(json.dumps({"hooks": {"PreToolUse": [{"matcher": "Edit|Write", "hooks": [
-            {"type": "command", "command": "python /x/memory_hook.py"}, mine]}]}}), encoding="utf-8")
+            own, mine]}]}}), encoding="utf-8")
         self.assertEqual(self.installer("--uninstall").returncode, 0)
         data = json.loads(settings.read_text(encoding="utf-8"))
         self.assertEqual(data["hooks"]["PreToolUse"][0]["hooks"], [mine])
@@ -700,7 +718,7 @@ class HardeningTests(TempProject):
     def test_never_overwrites_a_foreign_skill(self):
         foreign = self.tmp / "home" / ".claude" / "skills" / "tdd-loop"
         foreign.mkdir(parents=True)
-        (foreign / "SKILL.md").write_text("---\nname: my-own\ndescription: mine\n---\n", encoding="utf-8")
+        (foreign / "SKILL.md").write_text("---\nname: tdd-loop\ndescription: mine\n---\n", encoding="utf-8")
         (foreign / "notes.txt").write_text("keep me", encoding="utf-8")
         proc = self.installer()
         self.assertNotEqual(proc.returncode, 0)

@@ -27,7 +27,6 @@ KIT = Path(__file__).resolve().parent
 SKILLS = sorted(p for p in (KIT / "skills").iterdir() if (p / "SKILL.md").is_file())
 OBSOLETE = ["minimal-change", "read-before-write", "verify-before-done"]
 BEGIN, END = "<!-- claude-reliable-kit:begin -->", "<!-- claude-reliable-kit:end -->"
-HOOK_MARK = "memory_hook.py"
 
 
 class Plan:
@@ -54,15 +53,9 @@ def is_link(path):
     return path.is_symlink() or (hasattr(path, "is_junction") and path.is_junction())
 
 
-def ours(target, name):
-    """True if the folder holds a kit skill (marker file, or a SKILL.md declaring the kit skill's name)."""
-    if (target / MARKER).exists():
-        return True
-    skill_md = target / "SKILL.md"
-    try:
-        return skill_md.is_file() and f"name: {name}" in skill_md.read_text(encoding="utf-8")
-    except OSError:
-        return False
+def ours(target):
+    marker = target / MARKER
+    return marker.is_file() and not is_link(marker)
 
 
 def preflight_skills(dest, force):
@@ -71,7 +64,7 @@ def preflight_skills(dest, force):
         target = dest / skill.name
         if is_link(target):
             problems.append(f"{target} is a symbolic link or junction; remove it or install elsewhere")
-        elif target.exists() and not ours(target, skill.name) and not force:
+        elif target.exists() and not ours(target) and not force:
             problems.append(f"{target} exists and is not a Claude Reliable Kit skill; rename it or pass --force")
     return problems
 
@@ -79,7 +72,7 @@ def preflight_skills(dest, force):
 def copy_skills(dest, plan):
     for old in OBSOLETE:
         target = dest / old
-        if not is_link(target) and ours(target, old):
+        if not is_link(target) and ours(target):
             plan.note(f"remove obsolete skill {target}")
             if not plan.dry:
                 shutil.rmtree(target)
@@ -142,7 +135,8 @@ def load_settings(settings):
     hooks = data.get("hooks") if isinstance(data, dict) else None
     groups = hooks.get("PreToolUse", []) if isinstance(hooks, dict) else []
     if (not isinstance(data, dict) or (hooks is not None and not isinstance(hooks, dict)) or not isinstance(groups, list)
-            or not all(isinstance(g, dict) and isinstance(g.get("hooks", []), list) for g in groups)):
+            or not all(isinstance(g, dict) and isinstance(g.get("hooks", []), list)
+                       and all(isinstance(h, dict) for h in g.get("hooks", [])) for g in groups)):
         raise SystemExit(f"{settings} has an unexpected structure; add the hook by hand (see README). Nothing was changed.")
     return data
 
@@ -153,7 +147,7 @@ def edit_settings(settings, command, plan, remove=False):
     groups = hooks.get("PreToolUse", [])
     kept = []
     for group in groups:
-        entries = [h for h in group.get("hooks", []) if HOOK_MARK not in str(h.get("command", ""))]
+        entries = [h for h in group.get("hooks", []) if h.get("command") != command]
         if entries or not group.get("hooks"):
             kept.append({**group, "hooks": entries} if group.get("hooks") else group)
     if not remove:
@@ -221,12 +215,12 @@ def main():
     if a.uninstall:
         for skill in SKILLS:
             target = skills_dir / skill.name
-            if target.exists() and not is_link(target) and ours(target, skill.name):
+            if target.exists() and not is_link(target) and ours(target):
                 plan.note(f"remove skill {skills_dir / skill.name}")
                 if not plan.dry:
                     shutil.rmtree(skills_dir / skill.name)
         write_block(project / "CLAUDE.md", [], plan, remove=True)
-        edit_settings(settings, "", plan, remove=True)
+        edit_settings(settings, f"{py} {hook_path}", plan, remove=True)
     else:
         if sys.version_info < (3, 9):
             raise SystemExit("Python 3.9 or newer is required.")
@@ -241,6 +235,9 @@ def main():
                 if not plan.dry:
                     r = subprocess.run([sys.executable, str(skills_dir / "task-ledger" / "scripts" / "memory.py"), "seed",
                                         "--dir", str(project)], capture_output=True, text=True, encoding="utf-8", errors="replace")
+                    if r.returncode:
+                        detail = (r.stderr or r.stdout or "no diagnostic").strip()
+                        raise SystemExit(f"Skills installed, but memory seeding failed (exit {r.returncode}): {detail[-400:]}")
                     plan.done.append("  " + (r.stdout.strip().splitlines() or ["(no output)"])[0])
             else:
                 plan.done.append(f"skipped seed: {project} is not a Git repository")

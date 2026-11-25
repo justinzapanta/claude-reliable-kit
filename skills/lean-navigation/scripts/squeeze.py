@@ -168,8 +168,8 @@ def _state_dir():
 
 
 def record_gain(raw_chars, compact_chars):
-    """Keep running totals in .git/lean-squeeze-stats.json (never committed)."""
-    path = _state_dir() / "lean-squeeze-stats.json"
+    """Keep running totals in .git/lean-squeeze-stats-v2.json (never committed)."""
+    path = _state_dir() / "lean-squeeze-stats-v2.json"
     try:
         stats = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
     except (OSError, ValueError):
@@ -184,7 +184,7 @@ def record_gain(raw_chars, compact_chars):
 
 
 def show_gain():
-    path = _state_dir() / "lean-squeeze-stats.json"
+    path = _state_dir() / "lean-squeeze-stats-v2.json"
     try:
         stats = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, ValueError):
@@ -275,13 +275,14 @@ def main():
         lines = squeeze_diff(lines)
     lines = select(lines, budget)
     compact = "\n".join(lines)
-    if compact:
-        print(compact)
-    record_gain(len(full), len(compact))
     saved = save_full(full) if len(full) > len(compact) else None
-    pct = f", -{100 - len(compact) * 100 / len(full):.1f}%" if full and len(compact) < len(full) else ""
-    note = f"[squeeze] exit {proc.returncode}; {len(full):,} -> {len(compact):,} chars{pct}"
-    print(note + (f"; full output: {saved}" if saved else ""))
+    footer = f"[squeeze] exit {proc.returncode}; raw {len(full):,} chars"
+    if saved:
+        footer += f"; full output: {saved}"
+    reply = ((compact + "\n") if compact else "") + footer
+    reply = reply[:a.max_chars - 1] + "\n"
+    sys.stdout.write(reply)
+    record_gain(len(full), len(reply))
     sys.exit(proc.returncode)
 
 
