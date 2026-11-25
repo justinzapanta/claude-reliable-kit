@@ -1,37 +1,46 @@
 ---
 name: task-ledger
-description: Keeps a small requirements-and-decisions ledger. Use for long tasks with many requirements, work spanning sessions, or risk of losing context. Skip for short tasks.
+description: Project memory and an evidence graph for tasks. Use when starting work on files touched before, after a fix or decision worth keeping, or to prove a multi-step task is done.
 ---
 
-# Task Ledger and Lean Memory
+# Project Memory and Evidence Graph
 
-A small file that stops you from losing requirements, repeating checks, or re-reading files. It is a notebook, not a report. Hard cap: **30 entries**.
+Two small stores that stop you from re-reading the repo or rediscovering what was already learned. `${CLAUDE_SKILL_DIR}` is this skill's folder (outside Claude Code, the folder this file is in). Run the scripts from the project directory; don't read their source.
 
-## Entry kinds
+## Project memory (long-lived)
 
-| kind | use for |
+`memory` means `python ${CLAUDE_SKILL_DIR}/scripts/memory.py`. Each memory is one line linked to files and to other memories.
+
+| When | Command |
 |---|---|
-| `req` | each requirement from the user's request (so none get dropped) |
-| `decision` | a choice you made and why, one line |
-| `loc` | `path:line - why it matters` (saves re-searching) |
-| `verified` | a check you ran and its result |
-| `open` | something unverified, uncertain, or still to do |
-| `pref` | stable user preference or fact (the "hot" memory) |
+| Before editing, debugging, or reviewing files | `memory recall --file <path>` or `memory recall --changed` |
+| Looking for past context by topic | `memory recall rounding refund` |
+| A bug's root cause is found and fixed | `memory add bug "<cause and fix>" --files <paths> --tags <topic>` |
+| A choice with a reason someone could undo by accident | `memory add decision "<what and why>" --files <paths>` |
+| A trap that cost time (setup, ordering, hidden coupling) | `memory add gotcha "<trap>" --files <paths>` |
+| How a part of the system works, learned the hard way | `memory add concept "<summary>" --files <paths>` |
+| Connect related memories | `memory link <id> <id>` or `--link <id>` on add |
+| Memories may be outdated | `memory stale`, then `forget` or re-`add` |
+| New or empty memory on an existing repo | `memory seed` (fix commits and warning comments, marked inferred; `--dry-run` first) |
 
-## Workflow
+Recall ranks memories on the exact file, then on neighbouring files through `lean-navigation`'s code graph (imports and importers), then the same folder. Treat recalled memories as leads to verify, not facts: check `stale` when the file changed. Store conclusions, not conversations; one memory per fact; never secret values (the script refuses obvious ones). `pref` entries hold stable user preferences; before adding one, read [references/memory.md](references/memory.md).
 
-The helper is `scripts/ledger.py` in this skill's folder. Call it by full path from the project directory (`${CLAUDE_SKILL_DIR}` is this skill's folder; outside Claude Code use the folder this file is in); below, `ledger` means `python ${CLAUDE_SKILL_DIR}/scripts/ledger.py`.
+It lives in `.git/lean-memory.json` (private, never committed). To share with a team, set `LEAN_MEMORY_FILE` to a committed path. If the user installed the kit's memory hook, editing a file with recorded decisions pauses once and shows them; read them, then retry the edit or stop and ask if it conflicts.
 
-1. **Start** (only if the task qualifies): `ledger init`, then `ledger add req "..."` for each requirement.
-2. **During**: `ledger add decision|loc|open "..."` as things happen. One short line each.
-3. **After a check passes**: `ledger verify <id> "how it was checked"`. Mark a finished requirement with `ledger done <id>`. Don't re-verify items whose related code hasn't changed.
-4. **Before answering**: `ledger summary` and confirm every `req` is done and every `open` is either resolved or reported to the user.
-5. **Resuming**: run `ledger summary` (1,600 characters, pending first) from the same project. Expand a clipped entry with `ledger get <id>` only when needed. Read a Markdown export directly as a handoff.
+## Evidence graph (one task)
 
-## Memory and persistence
+For multi-step work, debugging, or anything you will claim is done. `ledger` means `python ${CLAUDE_SKILL_DIR}/scripts/ledger.py`. It records what the task needs, what you tried, and what proves it, linked to files.
 
-Inside a Git project the ledger is `.git/task-ledger.json` (persists, never committed); elsewhere `ledger.json`; `LEDGER_FILE` overrides. Before adding a `pref` entry or resuming a saved ledger, read [references/memory.md](references/memory.md). Never store secret values.
+| Step | Command |
+|---|---|
+| Goal and requirements | `ledger goal "..."`, then `ledger add req "<r1>" "<r2>" ...` (one per acceptance check) |
+| A guess to confirm or rule out | `ledger hypo "..." --files <paths>` |
+| Evidence: run a command now | `ledger fact "..." --run "<command>" [--expect-exit 1] --proves <id>|all [--kills <id>] --files <paths>` |
+| Evidence seen without a command | `ledger fact "..." --seen "<observation>" --proves <id>` (weaker) |
+| Choices and locations | `ledger add decision|loc|open "..."` |
+| Before saying done | `ledger prove`: requirements without passing, current evidence; failing, stale, or only observed evidence |
+| What the change touches but nothing checked | `ledger coverage [--base <ref>]`: affected tests not run, callers not looked at, routes not exercised |
+| See the whole graph | `ledger tree` |
+| At the end | `ledger close`: proven bug causes and decisions go to project memory |
 
-## Keep it small
-
-If it nears 30 entries, run `ledger trim` (drops the oldest verified/loc/decision entries first, never `open` or `pref`). Merge duplicates by hand.
+`fact --run` stores the command, exit code, and up to three decisive output lines, plus fingerprints of `--files`; editing those files later makes requirement evidence stale until you rerun it. A red run before a fix proves a hypothesis and stays valid. Never mark a requirement done without a fact; `prove` reports such entries. The ledger is `.git/task-ledger.json` in a Git project (`LEDGER_FILE` overrides), capped at 60 entries.

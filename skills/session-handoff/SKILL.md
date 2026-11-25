@@ -12,8 +12,10 @@ Write a resume point that lets someone continue safely without repeating discove
 1. **Goal:** one sentence in the user's terms.
 2. **Status:** done, in progress, or blocked, with what changed.
 3. **Key context:** paths, decisions, constraints, assumptions. Link existing plans, issues, and commits by path or ID instead of copying them.
-4. **Evidence:** checks actually run and their results. Mark guesses as guesses; never present unrun tests or unfinished work as done.
+4. **Evidence:** checks actually run and their results (if a ledger exists, paste `python ${CLAUDE_SKILL_DIR}/../task-ledger/scripts/ledger.py tree`: requirements, hypotheses, and the evidence on each). Mark guesses as guesses; never present unrun tests or unfinished work as done.
 5. **Open work:** unresolved questions, risks, blockers.
 6. **Next action:** the single best concrete step, plus which skill fits it (for example `debug-scientifically`).
+
+Before handing off, save lasting decisions, bugs, and gotchas with `python ${CLAUDE_SKILL_DIR}/../task-ledger/scripts/memory.py add <kind> "<text>" --files <paths>`, and tell the next session to start with `python ${CLAUDE_SKILL_DIR}/../task-ledger/scripts/memory.py recall --changed` (skip if the script is missing).
 
 Note OS, runtime, or setup assumptions if the next session may run elsewhere. Include only what is needed to resume: no tool logs, full plans, secrets, credentials, or private data.

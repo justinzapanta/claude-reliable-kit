@@ -9,10 +9,11 @@ Review as a skeptical maintainer. Find defects the change introduces, not style 
 
 ## Sequence
 
-1. **Confirm the target.** The ref resolves (or the patch file applies to the files it names), the diff is not empty, and the checkout is on the reviewed code before running anything. Read the surrounding code, tests, and stated requirements; skip unrelated files.
-2. **Spec check.** If there is a spec, issue, or request: list requirements the diff misses and changes nobody asked for, quoting the requirement line. A spec being silent about a case does not make breaking it acceptable.
-3. **Trace behavior.** Follow changed code through its callers and data boundaries. Check error paths, state changes, concurrency, compatibility, and security where relevant.
-4. **Probe tests** (when authorized and practical). Run focused tests. For a key new condition, invert it briefly and rerun: if the tests stay green, a test is missing. Restore it. Test output is evidence, not proof for untested paths.
+1. **Get the change map first, even for a one-file diff.** Run `python ${CLAUDE_SKILL_DIR}/../lean-navigation/scripts/graph.py impact --dir .` (add `--base <ref>` for a branch or PR). It lists changed symbols, callers, importers, tests to run, routes, and project memory recorded on those files. A change that contradicts a recorded decision or repeats a recorded bug is a finding; quote the memory. If the script is missing, use `git diff` and search callers by hand.
+2. **Confirm the target.** The ref resolves (or the patch file applies to the files it names), the diff is not empty, and the checkout is on the reviewed code before running anything. Read what the change map points to, plus stated requirements; skip unrelated files.
+3. **Spec check.** If there is a spec, issue, or request: list requirements the diff misses and changes nobody asked for, quoting the requirement line. A spec being silent about a case does not make breaking it acceptable.
+4. **Trace behavior.** Follow changed code through its callers and data boundaries. Check error paths, state changes, concurrency, compatibility, and security where relevant.
+5. **Probe tests** (when authorized and practical). Run the tests the change map lists; `python ${CLAUDE_SKILL_DIR}/../task-ledger/scripts/ledger.py coverage --base <ref>` shows which affected tests, callers, and routes nothing has exercised yet. For a key new condition, invert it briefly and rerun: if the tests stay green, a test is missing. Restore it. Test output is evidence, not proof for untested paths.
 
 ## Severity bar
 

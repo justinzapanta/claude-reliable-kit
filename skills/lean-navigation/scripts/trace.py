@@ -11,12 +11,16 @@ import sys
 from pathlib import Path
 from urllib.parse import urlsplit
 
+sys.dont_write_bytecode = True  # never leave __pycache__ inside the skill folder
 _spec = importlib.util.spec_from_file_location("lean_find", Path(__file__).with_name("find.py"))
 _find = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_find)
 
 SRC_EXT = r"(?:jsx?|tsx?|mjs|cjs|vue|svelte|py|rb|go|php|java|kt|cs|rs|swift)"
-FRAME = re.compile(r"((?:[A-Za-z][\w+.-]*://[^\s()'\"]*?/)?[\w@~.\-/\\]+\." + SRC_EXT + r")(?:\?[^\s:()'\"]*)?:(\d+)(?::\d+)?")
+# Bounded repeats keep matching linear on long pasted lines (unbounded versions were quadratic).
+FRAME = re.compile(r"((?:[A-Za-z][\w+.-]{0,20}://[^\s()'\"]{0,300}?/)?[\w@~.\-/\\]{1,300}\." + SRC_EXT
+                   + r")(?:\?[^\s:()'\"]{0,200})?:(\d+)(?::\d+)?")
+MAX_LINE, MAX_LINES = 2000, 400  # pasted errors beyond this are noise
 PY_FRAME = re.compile(r'File "([^"]+)", line (\d+)')
 URL = re.compile(r"(?:https?://[^\s'\"()<>]+|(?<![\w.])/(?:api|v\d+|graphql|rest|auth)[^\s'\"()<>]*)")
 IDENT_PATTERNS = [
@@ -39,6 +43,7 @@ def clean_path(raw):
 
 
 def extract(text):
+    text = "\n".join(line[:MAX_LINE] for line in text.splitlines()[:MAX_LINES])
     clues, seen = [], set()
 
     def add(kind, value, pattern, line=None):
@@ -90,6 +95,13 @@ def is_test(rel):
     return "/test" in "/" + s or ".test." in s or ".spec." in s or "__tests__" in s
 
 
+for _stream in (sys.stdout, sys.stderr):  # never crash on non-ASCII output (Windows consoles default to cp1252)
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("text", nargs="?", help="error text; reads stdin when omitted")
@@ -108,7 +120,10 @@ def main():
         print("No usable clues (stack frame, route, identifier, or message of 12+ characters). Paste the exact first error line.")
         return
     files = []
-    source = _find.changed_files(base) if a.changed else _find.files_under(base)
+    try:
+        source = list(_find.changed_files(base)) if a.changed else _find.files_under(base)
+    except (OSError, _find.subprocess.SubprocessError) as exc:
+        p.error(f"--changed needs a Git work tree ({type(exc).__name__}); run without --changed")
     for path in source:
         if len(files) >= a.max_files:
             break
@@ -162,6 +177,25 @@ def main():
         out.extend(block)
     if misses:
         out.append("\nNo match: " + "; ".join(misses) + ". Absence is not proof; check build aliases or generated code.")
+    hit_files = {h[1].as_posix() for c in clues for h in c["hits"][: a.per_clue] if not h[0]}
+    near = set()
+    if hit_files and _find.memory_store(base):
+        try:  # one import hop via the code graph, only when there are memories to look up
+            gspec = importlib.util.spec_from_file_location("lean_graph", Path(__file__).with_name("graph.py"))
+            gmod = importlib.util.module_from_spec(gspec)
+            gspec.loader.exec_module(gmod)
+            gfiles = gmod.build(base)["files"]
+            for rel, info in gfiles.items():
+                if rel in hit_files:
+                    near |= set(info.get("imports", []))
+                elif hit_files & set(info.get("imports", [])):
+                    near.add(rel)
+        except Exception:  # memory is a bonus; never fail the trace over it
+            near = set()
+    notes = _find.memory_notes(base, hit_files, near=near)
+    if notes:
+        out.append("\n" + _find.MEMORY_HEADER[0].upper() + _find.MEMORY_HEADER[1:])
+        out.extend(notes)
     rendered = "\n".join(out)
     print(rendered if len(rendered) <= a.max_chars else rendered[: a.max_chars - 11] + "[truncated]")
 

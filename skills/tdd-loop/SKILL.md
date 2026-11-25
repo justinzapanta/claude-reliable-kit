@@ -9,11 +9,11 @@ Turn the intended behavior into a failing test before writing the implementation
 
 ## Red, green, refactor
 
-1. Read the nearest implementation and tests. Find the project's test command and conventions.
+1. Read the nearest implementation and tests. Find the project's test command and conventions. If the suite prints a lot, run it as `python ${CLAUDE_SKILL_DIR}/../lean-navigation/scripts/squeeze.py -- <test command>` so only failures and the summary come back.
 2. State the behavior and its important boundaries. Name the production change that would make the test fail; if none would, the test is useless.
-3. Write one focused test at the layer that owns the behavior. Run it before touching production code. It must fail because the behavior is missing, not because of a typo, fixture, or environment problem. If it already passes, rethink the test.
+3. Write one focused test at the layer that owns the behavior. Run it before touching production code. It must fail because the behavior is missing, not because of a typo, fixture, or environment problem. Optionally record the red run as evidence: `python ${CLAUDE_SKILL_DIR}/../task-ledger/scripts/ledger.py fact "red: <behavior>" --run "<test command>" --expect-exit 1`. If it already passes, rethink the test.
 4. Write the smallest implementation that makes it pass. No unrelated cleanup or speculative abstraction.
-5. Rerun the focused test and see it pass. Then run the suite for the code you touched, or the full suite when a shared contract changed.
+5. Rerun the focused test and see it pass (`python ${CLAUDE_SKILL_DIR}/../task-ledger/scripts/ledger.py fact "green: <behavior>" --run "<test command>" --proves <req id>`). Then run the suite for the code you touched, or the full suite when a shared contract changed.
 6. Refactor only to improve clarity or remove duplication, and rerun the same checks.
 
 Work in vertical slices: one test, then its code, then the next. Never write all the tests first.

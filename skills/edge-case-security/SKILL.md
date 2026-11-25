@@ -20,7 +20,7 @@ List where data enters (requests, files, env, queues, third-party APIs, LLM outp
 - Duplicate submits, retries, concurrent requests.
 - Dependency failure: timeout, disk full, database down, partial write. Are errors handled and cleaned up?
 
-Write a test for the two or three most likely cases. For a security fix, write the abuse case as the first test.
+Write a test for the two or three most likely cases. For a security fix, write the abuse case as the first test and keep its run as evidence (`python ${CLAUDE_SKILL_DIR}/../task-ledger/scripts/ledger.py fact "non-owner is denied" --run "<test>" --proves <req id>`).
 
 ## 3. Security (untrusted input)
 

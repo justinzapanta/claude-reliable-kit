@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Show bounded symbol/heading outlines. Usage: outline.py FILE_OR_DIR [--max 60]."""
 import argparse
+import sys
 import ast
 import os
 import re
@@ -19,7 +20,7 @@ def candidates(target, max_files):
         yield target
         return
     try:
-        top = subprocess.run(["git", "-C", str(target), "rev-parse", "--show-toplevel"], capture_output=True, text=True, timeout=3)
+        top = subprocess.run(["git", "-C", str(target), "rev-parse", "--show-toplevel"], capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=3)
         if top.returncode == 0:
             root = Path(top.stdout.strip()).resolve()
             listing = subprocess.run(["git", "-C", str(root), "ls-files", "--cached", "--others", "--exclude-standard", "-z"], capture_output=True, timeout=10)
@@ -79,13 +80,20 @@ def symbols(path, src):
     return len(lines), out
 
 
+for _stream in (sys.stdout, sys.stderr):  # never crash on non-ASCII output (Windows consoles default to cp1252)
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("target")
     p.add_argument("--max", type=int, default=60, help="maximum symbols/headings")
     p.add_argument("--max-files", type=int, default=200)
     p.add_argument("--max-bytes", type=int, default=10_000_000)
-    p.add_argument("--max-chars", type=int, default=5000)
+    p.add_argument("--max-chars", type=int, default=1600)
     a = p.parse_args()
     if min(a.max, a.max_files, a.max_bytes) < 1 or a.max_chars < 200:
         p.error("--max, --max-files, and --max-bytes must be positive; --max-chars must be at least 200")

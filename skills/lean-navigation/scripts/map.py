@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Print a compact, body-free repository map. Usage: map.py [DIR] [--max-chars 5000]."""
 import argparse
+import sys
 import os
 import subprocess
 from collections import Counter
@@ -14,7 +15,7 @@ ENTRY_STEMS = {"main", "app", "server", "index", "cli", "__main__", "manage"}
 
 def repo_files(base):
     try:
-        top = subprocess.run(["git", "-C", str(base), "rev-parse", "--show-toplevel"], capture_output=True, text=True, timeout=3)
+        top = subprocess.run(["git", "-C", str(base), "rev-parse", "--show-toplevel"], capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=3)
         if top.returncode == 0:
             git_root = Path(top.stdout.strip()).resolve()
             proc = subprocess.run(["git", "-C", str(git_root), "ls-files", "--cached", "--others", "--exclude-standard", "-z"], capture_output=True, timeout=10)
@@ -38,10 +39,17 @@ def repo_files(base):
             yield Path(root) / name
 
 
+for _stream in (sys.stdout, sys.stderr):  # never crash on non-ASCII output (Windows consoles default to cp1252)
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("dir", nargs="?", default=".")
-    p.add_argument("--max-chars", type=int, default=5000)
+    p.add_argument("--max-chars", type=int, default=1600)
     p.add_argument("--max-files", type=int, default=10000)
     a = p.parse_args()
     if a.max_chars < 200 or a.max_files < 1:

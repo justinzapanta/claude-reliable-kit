@@ -12,7 +12,7 @@ A plan holds only the decisions an implementer could not make alone. For a clear
 Answer only the questions that could change the plan:
 
 - **Product:** who benefits, and what observable result makes this worth shipping? If it depends on a policy only the user can set, ask one focused question (see `ask-smart`).
-- **Engineering:** trace the affected code path. Where two approaches are credible, compare the simplest viable one with its strongest alternative on the constraint that matters, and name the evidence that would reverse the choice.
+- **Engineering:** trace the affected code path (`python ${CLAUDE_SKILL_DIR}/../lean-navigation/scripts/graph.py tree --dir .` and `python ${CLAUDE_SKILL_DIR}/../lean-navigation/scripts/graph.py brief <name> --dir .`; past decisions via `python ${CLAUDE_SKILL_DIR}/../task-ledger/scripts/memory.py recall <topic>`). Where two approaches are credible, compare the simplest viable one with its strongest alternative on the constraint that matters, and name the evidence that would reverse the choice.
 - **Delivery:** find the dependency most likely to break the plan and check it first. For a hard-to-reverse change, name the rollback path.
 - **QA:** name a case where the change looks done but fails the user, and the check that tells them apart.
 
@@ -38,4 +38,4 @@ End with risks and open questions, each with an owner (you or the user).
 
 ## Execute
 
-Respect the requested scope. For a planning-only request, deliver the plan and stop; don't create files unless asked. For implementation, carry each step through its Verify line before starting the next. When evidence contradicts the plan, change the plan. Keep internal discussion internal: return the decision or result, its evidence, and remaining uncertainty.
+Respect the requested scope. For a planning-only request, deliver the plan and stop; don't create files unless asked. For implementation, record the goal and each step's Verify line as requirements (`python ${CLAUDE_SKILL_DIR}/../task-ledger/scripts/ledger.py goal "..."`, `add req "..."`), prove each with `fact --run ... --proves <id>` before starting the next step, and finish with `prove`. When evidence contradicts the plan, change the plan. Keep internal discussion internal: return the decision or result, its evidence, and remaining uncertainty.

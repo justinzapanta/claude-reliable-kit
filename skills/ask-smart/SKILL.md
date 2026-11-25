@@ -24,4 +24,4 @@ Ask only when the answer changes what you build. Facts are your job (read the co
 
 ## Before building
 
-Restate the goal in one or two lines with your assumptions and an explicit "Out of scope:" line. Treat later corrections as updates to that statement, and make assumptions easy to change in the code.
+Restate the goal in one or two lines with your assumptions and an explicit "Out of scope:" line. On a multi-step task, record the agreed goal and requirements (`python ${CLAUDE_SKILL_DIR}/../task-ledger/scripts/ledger.py goal "..."`, `add req "..."`) so they are proven before you finish. Treat later corrections as updates to that statement, and make assumptions easy to change in the code.

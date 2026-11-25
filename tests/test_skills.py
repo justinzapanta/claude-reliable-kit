@@ -87,6 +87,17 @@ class SkillLint(unittest.TestCase):
         self.assertEqual(listed, NAMES)
         self.assertIn(f"collection of {len(SKILLS)} developer skills", readme)
 
+    def test_no_stray_control_characters_in_sources(self):
+        """Catches escaping slips such as a regex \b written as a backspace character."""
+        allowed = {9, 10, 13}
+        sources = [*ROOT.glob("skills/*/scripts/*.py"), *ROOT.glob("tools/*.py"), *ROOT.glob("tests/*.py"), ROOT / "install.py",
+                   *ROOT.glob("evals/fixtures/*.py"), *ROOT.glob("skills/*/SKILL.md"), *ROOT.glob("skills/*/references/*.md")]
+        for path in sources:
+            with self.subTest(file=path.relative_to(ROOT).as_posix()):
+                text = path.read_text(encoding="utf-8")
+                bad = sorted({hex(ord(c)) for c in text if ord(c) < 32 and ord(c) not in allowed})
+                self.assertEqual(bad, [], "control characters in source")
+
     def test_release_archive_per_skill(self):
         zips = {p.stem for p in (ROOT / "releases").glob("*.zip")}
         self.assertEqual(zips, NAMES)

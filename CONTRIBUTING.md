@@ -8,14 +8,23 @@ For claims about cost or reliability, run the same prompt in fresh sessions with
 
 ## Test and package a change
 
-Run these commands from the kit directory with Python 3. They use the standard library.
+Everything runs with Python 3.9+ and the standard library. One command runs the whole process:
 
 ```sh
-python -m unittest discover -s tests -v
-python tools/package_skills.py
-python tools/package_skills.py --check
+python tools/check.py                 # before every commit: tests, lint, release ZIP check, quick fuzz (~1-2 min)
+python tools/check.py --full          # before a release: + deep fuzz on two seeds + 6,000-file stress test
+python tools/check.py --repos <dir>   # + the workbench on real Git checkouts in <dir> (e.g. clones of flask, express)
 ```
 
-`tests/test_scripts.py` exercises every helper script on temporary projects (Git-dependent cases skip when Git is missing). `tests/test_skills.py` lints each `SKILL.md`: portable frontmatter, a "Use when" description of at most 200 characters, body size, working links and script paths, references to other kit skills, the README catalog, and one release ZIP per skill. Run the tests before packaging; the suite also confirms the ZIPs match the sources.
+| Tool | What it proves |
+|---|---|
+| `tests/test_scripts.py` | Each script's behavior, plus one regression test per fixed bug (`HardeningTests`) |
+| `tests/test_skills.py` | Skill files: portable frontmatter, description and body size, links, script paths, README catalog, no control characters |
+| `tools/fuzz.py` | Thousands of random and malformed inputs to every script never cause a traceback, a wrong exit code, or output over budget; dry runs never write |
+| `tools/stress.py` | A generated 6,000-file repository with long lines, odd encodings, a 3 MB log, and 300 commits: every command within its time and output budget |
+| `tools/workbench.py` | The same commands on real repositories you choose |
+| `tools/package_skills.py --check` | Release ZIPs match the sources |
+
+CI (`.github/workflows/ci.yml`) runs the fast check on Windows, macOS, and Linux with Python 3.9 and 3.13 for every push and pull request, and the full check weekly. When something fails, add a test that reproduces it before fixing it.
 
 The builder puts one ZIP per skill under `releases/`, including the MIT license. The check compares packaged file names and contents with the editable sources. In your pull request, include the failure that motivated the change, the affected skill and the checks you actually ran.

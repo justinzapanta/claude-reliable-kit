@@ -11,6 +11,7 @@ Every changed line should trace back to the request, fit the project, and be bac
 
 - Check `git status` and the relevant diff. Note edits already present, including untracked files, so you never overwrite or revert someone else's work.
 - Open the closest working example in the affected module (a sibling handler, test, or helper). Follow its naming, data contracts, error handling, and test style. If examples disagree, follow the one on the current code path.
+- One call for the file or function you will touch: `python ${CLAUDE_SKILL_DIR}/../lean-navigation/scripts/graph.py brief <path-or-name> --dir .` (definition, callers, tests, recorded decisions, recent commits; skip if missing). Respect a recorded decision or say why it no longer holds.
 - Search for an existing helper before writing a new one. For a version-sensitive API, check the installed code or current docs, not memory.
 - Write down the observable check that will prove the change works.
 
@@ -26,7 +27,7 @@ Every changed line should trace back to the request, fit the project, and be bac
 
 ## Before saying it works
 
-Match each claim to evidence:
+On a task with a ledger, run `python ${CLAUDE_SKILL_DIR}/../task-ledger/scripts/ledger.py prove` (requirements without passing, current evidence) and `python ${CLAUDE_SKILL_DIR}/../task-ledger/scripts/ledger.py coverage` (tests, callers, and routes the change affects that no evidence checked) before saying it works. Match each claim to evidence:
 
 | Claim | Evidence needed |
 |---|---|
