@@ -29,7 +29,7 @@ def run(script, *args, cwd=None, stdin=None, env=None):
 def write(base, rel, text):
     path = Path(base) / rel
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(text, encoding="utf-8", newline="\n")
+    path.write_bytes((text).encode("utf-8"))
     return path
 
 

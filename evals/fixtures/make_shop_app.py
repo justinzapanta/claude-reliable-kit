@@ -46,7 +46,7 @@ HOOKS = ["useCart", "useCartTotals", "useProducts", "useOrders", "useUser", "use
 def w(root, rel, text):
     p = root / rel
     p.parent.mkdir(parents=True, exist_ok=True)
-    p.write_text(text.lstrip("\n"), encoding="utf-8", newline="\n")
+    p.write_bytes((text.lstrip("\n")).encode("utf-8"))
 
 
 def backend(root, tax_bug, ship_bug=False):
@@ -550,9 +550,9 @@ def main():
         f = root / "backend/services/discounts.py"
         text = f.read_text(encoding="utf-8")
         start = text.index("def best_discount")
-        f.write_text(text[:start] + REVIEW_CHANGE.lstrip("\n"), encoding="utf-8", newline="\n")
+        f.write_bytes((text[:start] + REVIEW_CHANGE.lstrip("\n")).encode("utf-8"))
     if a.claude_md:
-        (root / "CLAUDE.md").write_text(CLAUDE_MD, encoding="utf-8", newline="\n")
+        (root / "CLAUDE.md").write_bytes((CLAUDE_MD).encode("utf-8"))
         run(root, "add", "CLAUDE.md")
         run(root, "commit", "-qm", "project rules")
     if a.memory:

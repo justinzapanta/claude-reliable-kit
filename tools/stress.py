@@ -52,7 +52,7 @@ def generate(repo, n_files, rng):
             body += "x = '" + "a." * 4000 + "'\n"  # very long line
         paths.append(rel)
         (repo / rel).parent.mkdir(parents=True, exist_ok=True)
-        (repo / rel).write_text(body, encoding="utf-8", newline="\n")
+        (repo / rel).write_bytes((body).encode("utf-8"))
     (repo / "api").mkdir()
     (repo / "api" / "routes.py").write_text("".join(f'@app.get("/api/items/{{item_id}}/r{k}")\ndef r{k}(item_id):\n    return {k}\n'
                                                     for k in range(200)), encoding="utf-8")
